@@ -16,8 +16,8 @@ namespace ProjectZen
             //var panden = new List<Pand>();
             var totalSw = Stopwatch.StartNew();
 
-            var sampleSize = 10;
-            var panden = pandFiles.Take(sampleSize).SelectMany(pf => BagParser.GetPanden(pf)).ToList();
+            var sampleSize = 10000;
+            var panden = pandFiles.Take(sampleSize).AsParallel().SelectMany(pf => BagParser.GetPanden(pf)).ToList();
 
             Console.WriteLine($"  Processed in: {totalSw.Elapsed} (Average: {totalSw.Elapsed / sampleSize}) | Total panden: {panden.Count:N0}");
 
