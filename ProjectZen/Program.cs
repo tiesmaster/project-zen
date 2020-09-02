@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace ProjectZen
@@ -12,19 +13,24 @@ namespace ProjectZen
         {
             var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml");
 
-            var panden = new List<Pand>();
+            //var panden = new List<Pand>();
             var totalSw = Stopwatch.StartNew();
 
-            foreach (var (pandFile, index) in pandFiles.WithIndex())
-            {
-                Console.WriteLine($"Processing {Path.GetFileName(pandFile)}");
-                var singleFileSw = Stopwatch.StartNew();
+            var sampleSize = 10;
+            var panden = pandFiles.Take(sampleSize).SelectMany(pf => BagParser.GetPanden(pf)).ToList();
 
-                panden.AddRange(BagParser.GetPanden(pandFile));
+            Console.WriteLine($"  Processed in: {totalSw.Elapsed} (Average: {totalSw.Elapsed / sampleSize}) | Total panden: {panden.Count:N0}");
 
-                var totalFilesProcessed = index + 1;
-                Console.WriteLine($"  Processed in: {singleFileSw.Elapsed} (Average: {totalSw.Elapsed / totalFilesProcessed}) | Total panden: {panden.Count:N0}");
-            }
+            //foreach (var (pandFile, index) in pandFiles.WithIndex())
+            //{
+            //    Console.WriteLine($"Processing {Path.GetFileName(pandFile)}");
+            //    var singleFileSw = Stopwatch.StartNew();
+
+            //    panden.AddRange(BagParser.GetPanden(pandFile));
+
+            //    var totalFilesProcessed = index + 1;
+            //    Console.WriteLine($"  Processed in: {singleFileSw.Elapsed} (Average: {totalSw.Elapsed / totalFilesProcessed}) | Total panden: {panden.Count:N0}");
+            //}
         }
     }
 
