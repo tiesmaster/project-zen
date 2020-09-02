@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Xml;
 
 namespace ProjectZen
@@ -7,8 +10,7 @@ namespace ProjectZen
     {
         static void Main()
         {
-            var firstPandenFile = "c:/src/projects/project-zen/tmp/small-zips-unpacked/9999PND08082020-000001.xml";
-            var pandenNodes = GetPandenElements(firstPandenFile);
+            //var firstPandenFile = "c:/src/projects/project-zen/tmp/small-zips-unpacked/9999PND08082020-000001.xml";
 
             //var count = xmlDocument.DocumentElement.ChildNodes.Count;
 
@@ -19,12 +21,32 @@ namespace ProjectZen
 
             //Console.WriteLine(nodes.Count);
 
-            var panden = new List<Pand>();
+            var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml"); //.Take(100);
 
-            foreach (XmlNode pandXml in pandenNodes)
+            var panden = new List<Pand>();
+            var totalSw = Stopwatch.StartNew();
+            foreach (var (pandFile, index) in pandFiles.WithIndex())
             {
-                panden.Add(Pand.From(pandXml));
+                Console.WriteLine($"Processing {Path.GetFileName(pandFile)}");
+                var singleFileSw = Stopwatch.StartNew();
+
+                var pandenNodes = GetPandenElements(pandFile);
+                foreach (XmlNode pandXml in pandenNodes)
+                {
+                    panden.Add(Pand.From(pandXml));
+                    //if (IsActive(pandXml))
+                    //{
+                    //}
+                }
+
+                var totalFilesProcessed = index + 1;
+                Console.WriteLine($"  Processed in: {singleFileSw.Elapsed} (Average: {totalSw.Elapsed / totalFilesProcessed}) | Total panden: {panden.Count:N0}");
             }
+        }
+
+        private static bool IsActive(XmlNode xmlNode)
+        {
+            return xmlNode["bag_LVC:aanduidingRecordInactief"].InnerText == "N";
         }
 
         private static XmlNodeList GetPandenElements(string filename)
@@ -60,6 +82,18 @@ namespace ProjectZen
                 Id = xmlNode["bag_LVC:identificatie"].InnerText,
                 ConstructionYear = int.Parse(xmlNode["bag_LVC:bouwjaar"].InnerText)
             };
+        }
+    }
+
+    public static class EnumerableExtensions
+    {
+        public static IEnumerable<(T, int)> WithIndex<T>(this IEnumerable<T> source)
+        {
+            var i = 0;
+            foreach (var item in source)
+            {
+                yield return (item, i++);
+            }
         }
     }
 }
