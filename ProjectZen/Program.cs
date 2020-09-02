@@ -14,19 +14,13 @@ namespace ProjectZen
 
             var panden = new List<Pand>();
             var totalSw = Stopwatch.StartNew();
+
             foreach (var (pandFile, index) in pandFiles.WithIndex())
             {
                 Console.WriteLine($"Processing {Path.GetFileName(pandFile)}");
                 var singleFileSw = Stopwatch.StartNew();
 
-                var pandenNodes = BagParser.ParsePandenFile(pandFile);
-                foreach (XmlNode pandXml in pandenNodes)
-                {
-                    if (BagParser.IsActive(pandXml))
-                    {
-                        panden.Add(Pand.From(pandXml));
-                    }
-                }
+                panden.AddRange(BagParser.GetPanden(pandFile));
 
                 var totalFilesProcessed = index + 1;
                 Console.WriteLine($"  Processed in: {singleFileSw.Elapsed} (Average: {totalSw.Elapsed / totalFilesProcessed}) | Total panden: {panden.Count:N0}");
@@ -34,8 +28,20 @@ namespace ProjectZen
         }
     }
 
-    public class BagParser
+    public static class BagParser
     {
+        public static IEnumerable<Pand> GetPanden(string filename)
+        {
+            var pandenNodes = BagParser.ParsePandenFile(filename);
+            foreach (XmlNode pandXml in pandenNodes)
+            {
+                if (BagParser.IsActive(pandXml))
+                {
+                    yield return Pand.From(pandXml);
+                }
+            }
+        }
+
         public static XmlNodeList ParsePandenFile(string filename)
         {
             var xmlDocument = new XmlDocument();
