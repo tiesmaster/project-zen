@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace ProjectZen
@@ -10,7 +11,22 @@ namespace ProjectZen
     {
         public static void Main()
         {
-            var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml");
+            //var rdNew = CoordinateSystem.Geometry(28992);
+            //var wgs84 = CoordinateSystem.DefaultGeometry;
+
+            //var homePoint = GeometryPoint.Create(rdNew, 91791.567, 441830.577, 0, 0);
+
+
+
+            //Console.WriteLine(homePoint);
+
+
+            //GeometryPoint.Create(x: 12.34, y: 56.78);
+            //GeometryFactory.MultiPolygon()
+            //    .Polygon().Ring(-5, -5).LineTo(0, -5).LineTo(0, -2)
+            //    .Polygon().Ring(-10, -10).LineTo(-5, -10).LineTo(-5, -7).Build();
+
+            var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml").Take(1);
 
             var panden = new List<Pand>();
             var totalSw = Stopwatch.StartNew();
@@ -43,6 +59,7 @@ namespace ProjectZen
 
             var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
             namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
+            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
             namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
             namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
 
