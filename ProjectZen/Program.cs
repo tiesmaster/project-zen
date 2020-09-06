@@ -21,12 +21,15 @@ namespace ProjectZen
 
         private static IEnumerable<Pand> ReadPanden()
         {
+            Console.WriteLine("Start reading Panden");
+            var totalSw = Stopwatch.StartNew();
+
             var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml");
 
             pandFiles = pandFiles.Take(100);
 
             var panden = new List<Pand>();
-            var totalSw = Stopwatch.StartNew();
+            var batchSw = Stopwatch.StartNew();
             foreach (var (pandFile, index) in pandFiles.WithIndex())
             {
                 Console.WriteLine($"Processing {Path.GetFileName(pandFile)}");
@@ -42,34 +45,40 @@ namespace ProjectZen
                 }
 
                 var totalFilesProcessed = index + 1;
-                Console.WriteLine($"  Processed in: {singleFileSw.Elapsed} (Average: {totalSw.Elapsed / totalFilesProcessed}) | Total panden: {panden.Count:N0}");
+                Console.WriteLine($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total panden: {panden.Count:N0}");
             }
 
-            return panden.Distinct(new PandenComparer()).ToList();
+            panden = panden.Distinct(new PandenComparer()).ToList();
+
+            Console.WriteLine($"Finished reading Panden (in {totalSw.Elapsed})");
+
+            return panden;
         }
 
         private static void PersistPanden(IEnumerable<Pand> panden)
         {
-            Console.WriteLine("Start saving");
+            Console.WriteLine("Start persisting Panden");
+            var totalSw = Stopwatch.StartNew();
+
             using var store = OpenDocumentStore();
 
-            foreach (var batch in panden.Batch(100))
+            foreach (var (batch, index) in panden.Batch(10_000).WithIndex())
             {
-                Console.WriteLine("Saving new batch");
+                Console.WriteLine($"Saving batch {index}");
+                var batchSw = Stopwatch.StartNew();
+
                 using var session = store.OpenSession();
                 foreach (var pand in batch)
                 {
                     session.Store(pand);
                 }
 
-                Console.WriteLine("Done storing");
-
                 session.SaveChanges();
 
-                Console.WriteLine("Done saving");
+                Console.WriteLine($"Saved batch {index} (in {batchSw.Elapsed})");
             }
 
-            Console.WriteLine("Done saving ALL panden");
+            Console.WriteLine($"Finished persisting Panden (in {totalSw.Elapsed})");
         }
 
         private static DocumentStore OpenDocumentStore()
