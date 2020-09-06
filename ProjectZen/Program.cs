@@ -13,6 +13,13 @@ namespace ProjectZen
     {
         public static void Main()
         {
+            var panden = ReadPanden();
+
+            PersistPanden(panden);
+        }
+
+        private static IEnumerable<Pand> ReadPanden()
+        {
             var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml");
 
             pandFiles = pandFiles.Take(1);
@@ -37,24 +44,32 @@ namespace ProjectZen
                 Console.WriteLine($"  Processed in: {singleFileSw.Elapsed} (Average: {totalSw.Elapsed / totalFilesProcessed}) | Total panden: {panden.Count:N0}");
             }
 
-            using var store = new DocumentStore
-            {
-                Urls = new[] { "http://localhost:8080" },
-                Database = "ProjectZen"
-            };
+            return panden.Distinct(new PandenComparer()).ToList();
+        }
 
-            panden = panden.Distinct(new PandenComparer()).ToList();
-
-            store.Initialize();
-
+        private static void PersistPanden(IEnumerable<Pand> panden)
+        {
+            using var store = OpenDocumentStore();
             using var session = store.OpenSession();
-
             foreach (var pand in panden)
             {
                 session.Store(pand);
             }
 
             session.SaveChanges();
+        }
+
+        private static DocumentStore OpenDocumentStore()
+        {
+            var store = new DocumentStore
+            {
+                Urls = new[] { "http://localhost:8080" },
+                Database = "ProjectZen"
+            };
+
+            store.Initialize();
+
+            return store;
         }
 
         private class PandenComparer : IEqualityComparer<Pand>
