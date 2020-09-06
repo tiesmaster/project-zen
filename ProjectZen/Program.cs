@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using MoreLinq;
 using Raven.Client.Documents;
 
 namespace ProjectZen
@@ -22,7 +23,7 @@ namespace ProjectZen
         {
             var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml");
 
-            pandFiles = pandFiles.Take(1);
+            pandFiles = pandFiles.Take(100);
 
             var panden = new List<Pand>();
             var totalSw = Stopwatch.StartNew();
@@ -49,14 +50,26 @@ namespace ProjectZen
 
         private static void PersistPanden(IEnumerable<Pand> panden)
         {
+            Console.WriteLine("Start saving");
             using var store = OpenDocumentStore();
-            using var session = store.OpenSession();
-            foreach (var pand in panden)
+
+            foreach (var batch in panden.Batch(100))
             {
-                session.Store(pand);
+                Console.WriteLine("Saving new batch");
+                using var session = store.OpenSession();
+                foreach (var pand in batch)
+                {
+                    session.Store(pand);
+                }
+
+                Console.WriteLine("Done storing");
+
+                session.SaveChanges();
+
+                Console.WriteLine("Done saving");
             }
 
-            session.SaveChanges();
+            Console.WriteLine("Done saving ALL panden");
         }
 
         private static DocumentStore OpenDocumentStore()
