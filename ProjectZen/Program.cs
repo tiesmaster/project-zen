@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Raven.Client.Documents;
 
 namespace ProjectZen
 {
@@ -34,6 +36,32 @@ namespace ProjectZen
                 var totalFilesProcessed = index + 1;
                 Console.WriteLine($"  Processed in: {singleFileSw.Elapsed} (Average: {totalSw.Elapsed / totalFilesProcessed}) | Total panden: {panden.Count:N0}");
             }
+
+            using var store = new DocumentStore
+            {
+                Urls = new[] { "http://localhost:8080" },
+                Database = "ProjectZen"
+            };
+
+            panden = panden.Distinct(new PandenComparer()).ToList();
+
+            store.Initialize();
+
+            using var session = store.OpenSession();
+
+            foreach (var pand in panden)
+            {
+                session.Store(pand);
+            }
+
+            session.SaveChanges();
+        }
+
+        private class PandenComparer : IEqualityComparer<Pand>
+        {
+            public bool Equals([AllowNull] Pand x, [AllowNull] Pand y) => x.Id == y.Id;
+
+            public int GetHashCode([DisallowNull] Pand obj) => obj.Id.GetHashCode();
         }
     }
 
