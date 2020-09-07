@@ -29,15 +29,9 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         public int CorrectionIndex { get; }
         public Interval ValidityInterval { get; }
 
-        public bool IsActive => Active;
-
-        public BagVersion WithActive(bool active)
-            => new BagVersion(active, CorrectionIndex, ValidityInterval);
-
-        public BagVersion WithCorrectionIndex(int correctionIndex)
-            => new BagVersion(Active, correctionIndex, ValidityInterval);
-
-        public BagVersion WithValidityInterval(Interval validityInterval)
-            => new BagVersion(Active, CorrectionIndex, validityInterval);
+        public bool IsActive(Instant referenceInstant)
+        {
+            return Active && CorrectionIndex == 0 && ValidityInterval.Contains(referenceInstant);
+        }
     }
 }
