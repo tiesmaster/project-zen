@@ -8,7 +8,7 @@ using System.Xml;
 using MoreLinq;
 using Raven.Client.Documents;
 
-namespace ProjectZen
+namespace Tiesmaster.ProjectZen
 {
     public static class Program
     {

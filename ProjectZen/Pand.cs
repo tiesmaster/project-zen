@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace ProjectZen
+namespace Tiesmaster.ProjectZen
 {
     public class Pand
     {

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 
-namespace ProjectZen
+namespace Tiesmaster.ProjectZen
 {
 
     public static class EnumerableExtensions
