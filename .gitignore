@@ -185,6 +185,7 @@ coverage*[.json, .xml, .info]
 _NCrunch_*
 .*crunch*.local.xml
 nCrunchTemp_*
+*.v3.ncrunchsolution
 
 # MightyMoose
 *.mm.*

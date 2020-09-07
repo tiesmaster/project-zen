@@ -19,3 +19,7 @@
 - https://github.com/quozd/awesome-dotnet#readme
 - https://epsg.io/transform#s_srs=28992&t_srs=4326
 - https://ravendb.net/docs/article-page/5.0/csharp/indexes/querying/spatial
+
+# BRAINDUMP 2020-09-08
+
+- https://www.kadaster.nl/-/specificatie-bag-historiemodel
