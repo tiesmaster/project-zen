@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZen", "ProjectZen\ProjectZen.csproj", "{7A2456DF-A33F-44C4-A056-58C397FCF323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZen", "ProjectZen\ProjectZen.csproj", "{7A2456DF-A33F-44C4-A056-58C397FCF323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZen.Domain", "ProjectZen.Domain\ProjectZen.Domain.csproj", "{6F668A46-FD6B-4A6F-80DC-14ABDD4CFC59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7A2456DF-A33F-44C4-A056-58C397FCF323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A2456DF-A33F-44C4-A056-58C397FCF323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A2456DF-A33F-44C4-A056-58C397FCF323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F668A46-FD6B-4A6F-80DC-14ABDD4CFC59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F668A46-FD6B-4A6F-80DC-14ABDD4CFC59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F668A46-FD6B-4A6F-80DC-14ABDD4CFC59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F668A46-FD6B-4A6F-80DC-14ABDD4CFC59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
