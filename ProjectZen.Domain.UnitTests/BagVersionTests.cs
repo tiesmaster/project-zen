@@ -1,6 +1,4 @@
 ﻿using FluentAssertions;
-using NodaTime;
-using Tiesmaster.ProjectZen.Domain.Bag;
 using Xunit;
 
 namespace Tiesmaster.ProjectZen.Domain.UnitTests
@@ -11,7 +9,7 @@ namespace Tiesmaster.ProjectZen.Domain.UnitTests
         public void GivenVersionIsNotActive_ThenIsNotActive()
         {
             // arrange
-            var bagVersion = new BagVersion(active: false, correctionIndex: 0, new Interval());
+            var bagVersion = A.BagVersion.WithActive(false);
 
             // act
             var isActive = bagVersion.IsActive;

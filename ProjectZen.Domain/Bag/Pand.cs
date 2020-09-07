@@ -1,5 +1,4 @@
-﻿using System;
-using NodaTime;
+﻿using NodaTime;
 
 namespace Tiesmaster.ProjectZen.Domain.Bag
 {
@@ -17,7 +16,7 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         public int ConstructionYear { get; }
     }
 
-    public class BagVersion
+    public readonly struct BagVersion
     {
         public BagVersion(bool active, int correctionIndex, Interval validityInterval)
         {
@@ -30,6 +29,15 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         public int CorrectionIndex { get; }
         public Interval ValidityInterval { get; }
 
-        public bool IsActive => throw new NotImplementedException();
+        public bool IsActive => Active;
+
+        public BagVersion WithActive(bool active)
+            => new BagVersion(active, CorrectionIndex, ValidityInterval);
+
+        public BagVersion WithCorrectionIndex(int correctionIndex)
+            => new BagVersion(Active, correctionIndex, ValidityInterval);
+
+        public BagVersion WithValidityInterval(Interval validityInterval)
+            => new BagVersion(Active, CorrectionIndex, validityInterval);
     }
 }
