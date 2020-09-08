@@ -23,3 +23,5 @@
 # BRAINDUMP 2020-09-08
 
 - https://www.kadaster.nl/-/specificatie-bag-historiemodel
+- https://www.linguee.nl/nederlands-engels/vertaling/peildatum.html
+- https://www.kadaster.nl/zakelijk/documentatie-en-webinars/documentatie?p_p_id=KadasterSearchPortlet&_KadasterSearchPortlet_deltarentPage=1&_KadasterSearchPortlet_keywords=&_KadasterSearchPortlet_resetCur=false&_KadasterSearchPortlet_currentPage=2
