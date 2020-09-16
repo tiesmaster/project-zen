@@ -34,36 +34,67 @@ namespace Tiesmaster.ProjectZen.BagImporter
         private static BagPand ParsePand(XmlNode node)
         {
             return new BagPand(
-                id: node["bag_LVC:identificatie"].InnerText,
+                id: ParseId(node),
                 version: ParseBagVersion(node),
-                constructionYear: int.Parse(node["bag_LVC:bouwjaar"].InnerText));
+                constructionYear: ParseConstructionYear(node));
+        }
+
+        private static string ParseId(XmlNode node)
+        {
+            return node["bag_LVC:identificatie"].InnerText;
+        }
+
+        private static int ParseConstructionYear(XmlNode node)
+        {
+            return ParseInt(node["bag_LVC:bouwjaar"]);
         }
 
         private static BagVersion ParseBagVersion(XmlNode node)
         {
             return new BagVersion(
-                active: !ParseBagBoolean(node["bag_LVC:aanduidingRecordInactief"].InnerText),
-                correctionIndex: int.Parse(node["bag_LVC:aanduidingRecordCorrectie"].InnerText),
-                validityInterval: ParseValidityInterval(node["bag_LVC:tijdvakgeldigheid"]));
+                active: ParseBagActive(node),
+                correctionIndex: ParseCorrectionIndex(node),
+                validityInterval: ParseValidityInterval(node));
+        }
+
+        private static bool ParseBagActive(XmlNode node)
+        {
+            return !ParseBagBoolean(node["bag_LVC:aanduidingRecordInactief"]);
+        }
+
+        private static int ParseCorrectionIndex(XmlNode node)
+        {
+            return ParseInt(node["bag_LVC:aanduidingRecordCorrectie"]);
         }
 
         private static Interval ParseValidityInterval(XmlNode node)
         {
-            var start = ParseBagInstant(node["bagtype:begindatumTijdvakGeldigheid"].InnerText);
-            var end = ParseBagInstant(node["bagtype:enddatumTijdvakGeldigheid"]?.InnerText);
+            var validityNode = node["bag_LVC:tijdvakgeldigheid"];
+
+            var start = ParseBagInstant(validityNode["bagtype:begindatumTijdvakGeldigheid"]);
+            var end = ParseBagInstant(validityNode["bagtype:enddatumTijdvakGeldigheid"]);
+
             return new Interval(start ?? Instant.MinValue, end ?? Instant.MaxValue);
         }
 
-        private static bool ParseBagBoolean(string text)
+        private static int ParseInt(XmlElement element)
         {
-            return text == "Y";
+            return int.Parse(element.InnerText);
         }
 
-        private static Instant? ParseBagInstant(string text)
+        private static bool ParseBagBoolean(XmlElement element)
         {
-            return text == default
-                ? null
-                : (Instant?)_bagInstantPattern.Parse(text).Value;
+            return element.InnerText == "Y";
+        }
+
+        private static Instant? ParseBagInstant(XmlElement element)
+        {
+            if (element == null)
+            {
+                return null;
+            }
+
+            return _bagInstantPattern.Parse(element.InnerText).Value;
         }
     }
 }
