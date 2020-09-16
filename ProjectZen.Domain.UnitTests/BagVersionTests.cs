@@ -69,7 +69,6 @@ namespace Tiesmaster.ProjectZen.Domain.UnitTests
         public static bool CallIsActiveWithReferenceWithinValidityInterval(this BagVersion bagVersion)
             => bagVersion.IsActive(bagVersion.ValidityInterval.Start + Duration.FromSeconds(5));
 
-        // IsActive
         public static BagVersion WithActive(this BagVersion bagVersion, bool active)
             => new BagVersion(active, bagVersion.CorrectionIndex, bagVersion.ValidityInterval);
 
