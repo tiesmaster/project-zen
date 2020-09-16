@@ -25,8 +25,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
         public void ParsePanden()
         {
             // arrange
-            var xmlReader = XmlReader.Create(new StringReader(@"
-<?xml version=""1.0"" encoding=""UTF-8""?>
+            var xmlReader = XmlReader.Create(new StringReader(
+@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <xb:BAG-Extract-Deelbestand-LVC xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xs=""http://www.w3.org/2001/XMLSchema"" xmlns:xb=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901"" xmlns:bag_LVC=""http://www.kadaster.nl/schemas/imbag/lvc/v20090901"" xmlns:gml=""http://www.opengis.net/gml"" xmlns:xlink=""http://www.w3.org/1999/xlink"" xmlns:bagtype=""http://www.kadaster.nl/schemas/imbag/imbag-types/v20090901"" xmlns:nen5825=""http://www.kadaster.nl/schemas/imbag/nen5825/v20090901"" xmlns:product_LVC=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901"" xmlns:selecties-extract=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-selecties/v20090901"" xsi:schemaLocation=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901 http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901/BagvsExtractDeelbestandExtractLvc-1.4.xsd"">
   <xb:antwoord>
     <xb:vraag>
