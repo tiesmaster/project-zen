@@ -2,9 +2,9 @@
 
 namespace Tiesmaster.ProjectZen.Domain.Bag
 {
-    public class Pand
+    public class BagPand
     {
-        public Pand(string id, BagVersion version, int constructionYear)
+        public BagPand(string id, BagVersion version, int constructionYear)
         {
             Id = id;
             ConstructionYear = constructionYear;

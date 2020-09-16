@@ -1,6 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
+
 using NodaTime;
+
 using Tiesmaster.ProjectZen.Domain.Bag;
+
 using Xunit;
 
 namespace Tiesmaster.ProjectZen.Domain.UnitTests
