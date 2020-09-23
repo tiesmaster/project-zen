@@ -72,7 +72,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             var validityNode = node["bag_LVC:tijdvakgeldigheid"];
 
             var start = ParseBagInstant(validityNode["bagtype:begindatumTijdvakGeldigheid"]);
-            var end = ParseBagInstant(validityNode["bagtype:enddatumTijdvakGeldigheid"]);
+            var end = ParseBagInstant(validityNode["bagtype:einddatumTijdvakGeldigheid"]);
 
             return new Interval(start ?? Instant.MinValue, end ?? Instant.MaxValue);
         }
