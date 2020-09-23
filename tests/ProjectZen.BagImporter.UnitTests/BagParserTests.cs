@@ -16,12 +16,6 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
     public class BagParserTests
     {
         [Fact]
-        public void BreakIceTest()
-        {
-            true.Should().BeTrue();
-        }
-
-        [Fact]
         public void ParsePanden()
         {
             // arrange
