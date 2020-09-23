@@ -1,9 +1,11 @@
-﻿using System;
+using System;
+
 using NodaTime;
 using NodaTime.Extensions;
+
 using Tiesmaster.ProjectZen.Domain.Bag;
 
-namespace Tiesmaster.ProjectZen.Domain.UnitTests
+namespace Tiesmaster.ProjectZen.TestHelpers
 {
     public static class A
     {

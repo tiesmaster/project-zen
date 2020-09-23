@@ -1,21 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F95593DE-1BAE-4011-868B-DB25C2CBC20E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZen.BagImporter", "src\ProjectZen.BagImporter\ProjectZen.BagImporter.csproj", "{9C66E999-6B4A-4A37-A52D-A73A45A2B276}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZen.BagImporter", "src\ProjectZen.BagImporter\ProjectZen.BagImporter.csproj", "{9C66E999-6B4A-4A37-A52D-A73A45A2B276}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZen.Domain", "src\ProjectZen.Domain\ProjectZen.Domain.csproj", "{30C7929A-90B9-48DE-A435-FE1583299A18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZen.Domain", "src\ProjectZen.Domain\ProjectZen.Domain.csproj", "{30C7929A-90B9-48DE-A435-FE1583299A18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZen", "src\ProjectZen\ProjectZen.csproj", "{D584F1CC-DE8D-401D-BB97-3ED7EF3999E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZen", "src\ProjectZen\ProjectZen.csproj", "{D584F1CC-DE8D-401D-BB97-3ED7EF3999E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{45F06066-E5C2-4120-BBB6-773F16086FDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZen.BagImporter.UnitTests", "tests\ProjectZen.BagImporter.UnitTests\ProjectZen.BagImporter.UnitTests.csproj", "{DA1DEF89-AFAE-47D9-B5EE-D2F4D342F1FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZen.BagImporter.UnitTests", "tests\ProjectZen.BagImporter.UnitTests\ProjectZen.BagImporter.UnitTests.csproj", "{DA1DEF89-AFAE-47D9-B5EE-D2F4D342F1FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZen.Domain.UnitTests", "tests\ProjectZen.Domain.UnitTests\ProjectZen.Domain.UnitTests.csproj", "{4A98BB71-EBB2-4F5B-9C3C-2FDA98936616}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZen.Domain.UnitTests", "tests\ProjectZen.Domain.UnitTests\ProjectZen.Domain.UnitTests.csproj", "{4A98BB71-EBB2-4F5B-9C3C-2FDA98936616}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZen.TestHelpers", "tests\ProjectZen.TestHelpers\ProjectZen.TestHelpers.csproj", "{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,9 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9C66E999-6B4A-4A37-A52D-A73A45A2B276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -90,6 +89,21 @@ Global
 		{4A98BB71-EBB2-4F5B-9C3C-2FDA98936616}.Release|x64.Build.0 = Release|Any CPU
 		{4A98BB71-EBB2-4F5B-9C3C-2FDA98936616}.Release|x86.ActiveCfg = Release|Any CPU
 		{4A98BB71-EBB2-4F5B-9C3C-2FDA98936616}.Release|x86.Build.0 = Release|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Debug|x64.Build.0 = Debug|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Debug|x86.Build.0 = Debug|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Release|x64.ActiveCfg = Release|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Release|x64.Build.0 = Release|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Release|x86.ActiveCfg = Release|Any CPU
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9C66E999-6B4A-4A37-A52D-A73A45A2B276} = {F95593DE-1BAE-4011-868B-DB25C2CBC20E}
@@ -97,5 +111,9 @@ Global
 		{D584F1CC-DE8D-401D-BB97-3ED7EF3999E8} = {F95593DE-1BAE-4011-868B-DB25C2CBC20E}
 		{DA1DEF89-AFAE-47D9-B5EE-D2F4D342F1FB} = {45F06066-E5C2-4120-BBB6-773F16086FDA}
 		{4A98BB71-EBB2-4F5B-9C3C-2FDA98936616} = {45F06066-E5C2-4120-BBB6-773F16086FDA}
+		{80A4A881-9B7A-4B13-97B0-B8C0FED5129D} = {45F06066-E5C2-4120-BBB6-773F16086FDA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5750E9DB-FFBA-4061-8CB5-31F05882532D}
 	EndGlobalSection
 EndGlobal

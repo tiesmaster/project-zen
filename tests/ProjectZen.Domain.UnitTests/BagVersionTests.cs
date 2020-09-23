@@ -3,6 +3,7 @@ using FluentAssertions;
 using NodaTime;
 
 using Tiesmaster.ProjectZen.Domain.Bag;
+using Tiesmaster.ProjectZen.TestHelpers;
 
 using Xunit;
 

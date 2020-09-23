@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ProjectZen.Domain\ProjectZen.Domain.csproj" />
+    <ProjectReference Include="..\ProjectZen.TestHelpers\ProjectZen.TestHelpers.csproj" />
   </ItemGroup>
 
 </Project>
