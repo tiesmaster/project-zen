@@ -14,6 +14,9 @@ namespace Tiesmaster.ProjectZen.BagImporter
     {
         private static readonly InstantPattern _bagInstantPattern = InstantPattern.Create("yyyyMMddHHmmssff", CultureInfo.InvariantCulture);
 
+        public static IEnumerable<BagPand> ParsePanden(string filename)
+            => ParsePanden(XmlReader.Create(filename));
+
         public static IEnumerable<BagPand> ParsePanden(XmlReader xmlReader)
         {
             var xmlDocument = new XmlDocument();
