@@ -11,6 +11,7 @@ using NodaTime;
 using Raven.Client.Documents;
 
 using Tiesmaster.ProjectZen.BagImporter;
+using Tiesmaster.ProjectZen.Domain;
 using Tiesmaster.ProjectZen.Domain.Bag;
 
 namespace Tiesmaster.ProjectZen
@@ -21,7 +22,9 @@ namespace Tiesmaster.ProjectZen
         {
             var panden = ReadPanden();
 
-            PersistPanden(panden);
+            var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
+
+            PersistBuildings(buildings);
         }
 
         private static IEnumerable<BagPand> ReadPanden()
@@ -55,22 +58,22 @@ namespace Tiesmaster.ProjectZen
             return allPanden;
         }
 
-        private static void PersistPanden(IEnumerable<BagPand> panden)
+        private static void PersistBuildings(IEnumerable<Building> buildings)
         {
-            Console.WriteLine("Start persisting Panden");
+            Console.WriteLine("Start persisting Buildings");
             var totalSw = Stopwatch.StartNew();
 
             using var store = OpenDocumentStore();
 
-            foreach (var (batch, index) in panden.Batch(10_000).WithIndex())
+            foreach (var (buildingBatch, index) in buildings.Batch(10_000).WithIndex())
             {
                 Console.WriteLine($"Saving batch {index}");
                 var batchSw = Stopwatch.StartNew();
 
                 using var session = store.OpenSession();
-                foreach (var pand in batch)
+                foreach (var building in buildingBatch)
                 {
-                    session.Store(pand);
+                    session.Store(building);
                 }
 
                 session.SaveChanges();
@@ -78,7 +81,7 @@ namespace Tiesmaster.ProjectZen
                 Console.WriteLine($"Saved batch {index} (in {batchSw.Elapsed})");
             }
 
-            Console.WriteLine($"Finished persisting Panden (in {totalSw.Elapsed})");
+            Console.WriteLine($"Finished persisting Buildings (in {totalSw.Elapsed})");
         }
 
         private static DocumentStore OpenDocumentStore()
