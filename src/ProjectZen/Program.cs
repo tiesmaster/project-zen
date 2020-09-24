@@ -42,14 +42,9 @@ namespace Tiesmaster.ProjectZen
                 Console.WriteLine($"Processing {Path.GetFileName(pandFile)}");
                 var singleFileSw = Stopwatch.StartNew();
 
-                var panden2 = BagParser.ParsePanden(pandFile);
-                foreach (var pand in panden2)
-                {
-                    if (pand.Version.IsActive(referenceInstant))
-                    {
-                        allPanden.Add(pand);
-                    }
-                }
+                allPanden.AddRange(from pand in BagParser.ParsePanden(pandFile)
+                                   where pand.Version.IsActive(referenceInstant)
+                                   select pand);
 
                 var totalFilesProcessed = index + 1;
                 Console.WriteLine($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total panden: {allPanden.Count:N0}");
