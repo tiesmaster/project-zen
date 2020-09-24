@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+
 using NodaTime;
 
 namespace Tiesmaster.ProjectZen.Domain.Bag
@@ -14,6 +16,26 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         public string Id { get; }
         public BagVersion Version { get; }
         public int ConstructionYear { get; }
+
+        public bool IsActive(Instant referenceInstant) => Version.IsActive(referenceInstant);
+    }
+
+    public class BagVerblijfsObject
+    {
+        public BagVerblijfsObject(string id, BagVersion version, ImmutableList<string> relatedPanden)
+        {
+            Id = id;
+            Version = version;
+            RelatedPanden = relatedPanden;
+        }
+
+        public BagVerblijfsObject(string id, BagVersion version, params string[] relatedPanden) : this(id, version, relatedPanden.ToImmutableList())
+        {
+        }
+
+        public string Id { get; }
+        public BagVersion Version { get; }
+        public ImmutableList<string> RelatedPanden { get; }
 
         public bool IsActive(Instant referenceInstant) => Version.IsActive(referenceInstant);
     }

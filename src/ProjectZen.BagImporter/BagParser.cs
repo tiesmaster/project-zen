@@ -34,12 +34,37 @@ namespace Tiesmaster.ProjectZen.BagImporter
                    select ParsePand(node);
         }
 
+        public static IEnumerable<BagVerblijfsObject> ParseVerblijfsObjecten(XmlReader xmlReader)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(xmlReader);
+
+            var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
+            namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
+            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
+            namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
+            namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
+
+            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Verblijfsobject", namespaceManager);
+
+            return from XmlNode node in nodes
+                   select ParseVerblijfsObject(node);
+        }
+
         private static BagPand ParsePand(XmlNode node)
         {
             return new BagPand(
                 id: ParseId(node),
                 version: ParseBagVersion(node),
                 constructionYear: ParseConstructionYear(node));
+        }
+
+        private static BagVerblijfsObject ParseVerblijfsObject(XmlNode node)
+        {
+            return new BagVerblijfsObject(
+                id: ParseId(node),
+                version: ParseBagVersion(node),
+                relatedPanden: ParseRelatedPanden(node).ToArray());
         }
 
         private static string ParseId(XmlNode node)
@@ -50,6 +75,11 @@ namespace Tiesmaster.ProjectZen.BagImporter
         private static int ParseConstructionYear(XmlNode node)
         {
             return ParseInt(node["bag_LVC:bouwjaar"]);
+        }
+
+        private static IEnumerable<string> ParseRelatedPanden(XmlNode node)
+        {
+            yield return node["bag_LVC:gerelateerdPand"].InnerText;
         }
 
         private static BagVersion ParseBagVersion(XmlNode node)
