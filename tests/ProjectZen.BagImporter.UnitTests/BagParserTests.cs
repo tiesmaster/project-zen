@@ -1,4 +1,3 @@
-
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -217,6 +216,83 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 "0599100000634909");
+
+            // act
+            var verblijfsObjecten = BagParser.ParseVerblijfsObjecten(xmlReader);
+
+            // assert
+            verblijfsObjecten.Should().ContainSingle();
+            verblijfsObjecten.Single().Should().BeEquivalentTo(expectedVerblijfsObject);
+        }
+
+        [Fact]
+        public void ParseVerblijfsObject_MultipleRelatedPanden()
+        {
+            // arrange
+            var xmlReader = XmlReader.Create(new StringReader(
+@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<xb:BAG-Extract-Deelbestand-LVC xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xs=""http://www.w3.org/2001/XMLSchema"" xmlns:xb=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901"" xmlns:bag_LVC=""http://www.kadaster.nl/schemas/imbag/lvc/v20090901"" xmlns:gml=""http://www.opengis.net/gml"" xmlns:xlink=""http://www.w3.org/1999/xlink"" xmlns:bagtype=""http://www.kadaster.nl/schemas/imbag/imbag-types/v20090901"" xmlns:nen5825=""http://www.kadaster.nl/schemas/imbag/nen5825/v20090901"" xmlns:product_LVC=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901"" xmlns:selecties-extract=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-selecties/v20090901"" xsi:schemaLocation=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901 http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901/BagvsExtractDeelbestandExtractLvc-1.4.xsd"">
+  <xb:antwoord>
+    <xb:vraag>
+      <selecties-extract:Gebied-Registratief>
+        <selecties-extract:Gebied-NLD>
+          <selecties-extract:GebiedIdentificatie>9999</selecties-extract:GebiedIdentificatie>
+          <selecties-extract:GebiedNaam>Nederland</selecties-extract:GebiedNaam>
+          <selecties-extract:gebiedTypeNederland>1</selecties-extract:gebiedTypeNederland>
+        </selecties-extract:Gebied-NLD>
+      </selecties-extract:Gebied-Registratief>
+      <selecties-extract:StandTechnischeDatum>20200808</selecties-extract:StandTechnischeDatum>
+    </xb:vraag>
+    <xb:producten>
+      <product_LVC:LVC-product>
+        <bag_LVC:Verblijfsobject>
+          <bag_LVC:gerelateerdeAdressen>
+            <bag_LVC:hoofdadres>
+              <bag_LVC:identificatie>0599200000300941</bag_LVC:identificatie>
+            </bag_LVC:hoofdadres>
+          </bag_LVC:gerelateerdeAdressen>
+          <bag_LVC:identificatie>0599010000253867</bag_LVC:identificatie>
+          <bag_LVC:aanduidingRecordInactief>N</bag_LVC:aanduidingRecordInactief>
+          <bag_LVC:aanduidingRecordCorrectie>0</bag_LVC:aanduidingRecordCorrectie>
+          <bag_LVC:officieel>N</bag_LVC:officieel>
+          <bag_LVC:verblijfsobjectGeometrie>
+            <gml:Point srsName=""urn:ogc:def:crs:EPSG::28992"">
+              <gml:pos>95778.98 435685.07 0.0</gml:pos>
+            </gml:Point>
+          </bag_LVC:verblijfsobjectGeometrie>
+          <bag_LVC:gebruiksdoelVerblijfsobject>overige gebruiksfunctie</bag_LVC:gebruiksdoelVerblijfsobject>
+          <bag_LVC:oppervlakteVerblijfsobject>32</bag_LVC:oppervlakteVerblijfsobject>
+          <bag_LVC:verblijfsobjectStatus>Verblijfsobject in gebruik</bag_LVC:verblijfsobjectStatus>
+          <bag_LVC:tijdvakgeldigheid>
+            <bagtype:begindatumTijdvakGeldigheid>1993113000000000</bagtype:begindatumTijdvakGeldigheid>
+          </bag_LVC:tijdvakgeldigheid>
+          <bag_LVC:inOnderzoek>N</bag_LVC:inOnderzoek>
+          <bag_LVC:bron>
+            <bagtype:documentdatum>19750101</bagtype:documentdatum>
+            <bagtype:documentnummer>B2--0130--92</bagtype:documentnummer>
+          </bag_LVC:bron>
+          <bag_LVC:gerelateerdPand>
+            <bag_LVC:identificatie>0599100000634909</bag_LVC:identificatie>
+          </bag_LVC:gerelateerdPand>
+          <bag_LVC:gerelateerdPand>
+            <bag_LVC:identificatie>0599100000634910</bag_LVC:identificatie>
+          </bag_LVC:gerelateerdPand>
+        </bag_LVC:Verblijfsobject>
+      </product_LVC:LVC-product>
+    </xb:producten>
+  </xb:antwoord>
+</xb:BAG-Extract-Deelbestand-LVC>
+"));
+
+            var startInstant = Instant.FromUtc(1993, 11, 30, 00, 00);
+            var expectedVerblijfsObject = new BagVerblijfsObject(
+                "0599010000253867",
+                new BagVersion(
+                    active: true,
+                    correctionIndex: 0,
+                    new Interval(startInstant, Instant.MaxValue)),
+                "0599100000634909",
+                "0599100000634910");
 
             // act
             var verblijfsObjecten = BagParser.ParseVerblijfsObjecten(xmlReader);
