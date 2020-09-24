@@ -1,4 +1,4 @@
-﻿using NodaTime;
+using NodaTime;
 
 namespace Tiesmaster.ProjectZen.Domain.Bag
 {
@@ -14,6 +14,8 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         public string Id { get; }
         public BagVersion Version { get; }
         public int ConstructionYear { get; }
+
+        public bool IsActive(Instant referenceInstant) => Version.IsActive(referenceInstant);
     }
 
     public readonly struct BagVersion

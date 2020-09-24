@@ -46,7 +46,7 @@ namespace Tiesmaster.ProjectZen
                 var singleFileSw = Stopwatch.StartNew();
 
                 allPanden.AddRange(from pand in BagParser.ParsePanden(pandFile)
-                                   where pand.Version.IsActive(referenceInstant)
+                                   where pand.IsActive(referenceInstant)
                                    select pand);
 
                 var totalFilesProcessed = index + 1;
