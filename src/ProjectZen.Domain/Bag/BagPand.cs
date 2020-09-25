@@ -50,6 +50,18 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         public BagVersion Version { get; }
     }
 
+    public class BagOpenbareRuimte
+    {
+        public BagOpenbareRuimte(string id, BagVersion version)
+        {
+            Id = id;
+            Version = version;
+        }
+
+        public string Id { get; }
+        public BagVersion Version { get; }
+    }
+
     public readonly struct BagVersion
     {
         public BagVersion(bool active, int correctionIndex, Interval validityInterval)

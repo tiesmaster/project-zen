@@ -65,7 +65,24 @@ namespace Tiesmaster.ProjectZen.BagImporter
             var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Nummeraanduiding", namespaceManager);
 
             return from XmlNode node in nodes
-                   select ParseNummeraanduiding(node, namespaceManager);
+                   select ParseNummeraanduiding(node);
+        }
+
+        public static IEnumerable<BagOpenbareRuimte> ParseOpenbareRuimten(XmlReader xmlReader)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(xmlReader);
+
+            var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
+            namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
+            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
+            namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
+            namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
+
+            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:OpenbareRuimte", namespaceManager);
+
+            return from XmlNode node in nodes
+                   select ParseOpenbareRuimte(node);
         }
 
         private static BagPand ParsePand(XmlNode node)
@@ -84,9 +101,16 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 relatedPanden: ParseRelatedPanden(node, namespaceManager).ToArray());
         }
 
-        private static BagNummeraanduiding ParseNummeraanduiding(XmlNode node, XmlNamespaceManager namespaceManager)
+        private static BagNummeraanduiding ParseNummeraanduiding(XmlNode node)
         {
             return new BagNummeraanduiding(
+                id: ParseId(node),
+                version: ParseBagVersion(node));
+        }
+
+        private static BagOpenbareRuimte ParseOpenbareRuimte(XmlNode node)
+        {
+            return new BagOpenbareRuimte(
                 id: ParseId(node),
                 version: ParseBagVersion(node));
         }
