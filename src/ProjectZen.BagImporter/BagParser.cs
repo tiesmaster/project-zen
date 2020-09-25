@@ -34,7 +34,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                    select ParsePand(node);
         }
 
-        public static IEnumerable<BagVerblijfsObject> ParseVerblijfsObjecten(XmlReader xmlReader)
+        public static IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(XmlReader xmlReader)
         {
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(xmlReader);
@@ -48,7 +48,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Verblijfsobject", namespaceManager);
 
             return from XmlNode node in nodes
-                   select ParseVerblijfsObject(node, namespaceManager);
+                   select ParseVerblijfsobject(node, namespaceManager);
         }
 
         public static IEnumerable<BagNummeraanduiding> ParseNummeraanduidingen(XmlReader xmlReader)
@@ -76,9 +76,9 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 constructionYear: ParseConstructionYear(node));
         }
 
-        private static BagVerblijfsObject ParseVerblijfsObject(XmlNode node, XmlNamespaceManager namespaceManager)
+        private static BagVerblijfsobject ParseVerblijfsobject(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            return new BagVerblijfsObject(
+            return new BagVerblijfsobject(
                 id: ParseId(node),
                 version: ParseBagVersion(node),
                 relatedPanden: ParseRelatedPanden(node, namespaceManager).ToArray());

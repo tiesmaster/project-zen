@@ -20,16 +20,16 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         public bool IsActive(Instant referenceInstant) => Version.IsActive(referenceInstant);
     }
 
-    public class BagVerblijfsObject
+    public class BagVerblijfsobject
     {
-        public BagVerblijfsObject(string id, BagVersion version, ImmutableList<string> relatedPanden)
+        public BagVerblijfsobject(string id, BagVersion version, ImmutableList<string> relatedPanden)
         {
             Id = id;
             Version = version;
             RelatedPanden = relatedPanden;
         }
 
-        public BagVerblijfsObject(string id, BagVersion version, params string[] relatedPanden) : this(id, version, relatedPanden.ToImmutableList())
+        public BagVerblijfsobject(string id, BagVersion version, params string[] relatedPanden) : this(id, version, relatedPanden.ToImmutableList())
         {
         }
 

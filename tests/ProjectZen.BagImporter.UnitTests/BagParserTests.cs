@@ -153,7 +153,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
         }
 
         [Fact]
-        public void ParseVerblijfsObject()
+        public void ParseVerblijfsobject()
         {
             // arrange
             var xmlReader = XmlReader.Create(new StringReader(
@@ -209,7 +209,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 "));
 
             var startInstant = Instant.FromUtc(1993, 11, 30, 00, 00);
-            var expectedVerblijfsObject = new BagVerblijfsObject(
+            var expectedVerblijfsobject = new BagVerblijfsobject(
                 "0599010000253867",
                 new BagVersion(
                     active: true,
@@ -218,15 +218,15 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                 "0599100000634909");
 
             // act
-            var verblijfsObjecten = BagParser.ParseVerblijfsObjecten(xmlReader);
+            var verblijfsobjecten = BagParser.ParseVerblijfsobjecten(xmlReader);
 
             // assert
-            verblijfsObjecten.Should().ContainSingle();
-            verblijfsObjecten.Single().Should().BeEquivalentTo(expectedVerblijfsObject);
+            verblijfsobjecten.Should().ContainSingle();
+            verblijfsobjecten.Single().Should().BeEquivalentTo(expectedVerblijfsobject);
         }
 
         [Fact]
-        public void ParseVerblijfsObject_MultipleRelatedPanden()
+        public void ParseVerblijfsobject_MultipleRelatedPanden()
         {
             // arrange
             var xmlReader = XmlReader.Create(new StringReader(
@@ -285,7 +285,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 "));
 
             var startInstant = Instant.FromUtc(1993, 11, 30, 00, 00);
-            var expectedVerblijfsObject = new BagVerblijfsObject(
+            var expectedVerblijfsobject = new BagVerblijfsobject(
                 "0599010000253867",
                 new BagVersion(
                     active: true,
@@ -295,11 +295,11 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                 "0599100000634910");
 
             // act
-            var verblijfsObjecten = BagParser.ParseVerblijfsObjecten(xmlReader);
+            var verblijfsobjecten = BagParser.ParseVerblijfsobjecten(xmlReader);
 
             // assert
-            verblijfsObjecten.Should().ContainSingle();
-            verblijfsObjecten.Single().Should().BeEquivalentTo(expectedVerblijfsObject);
+            verblijfsobjecten.Should().ContainSingle();
+            verblijfsobjecten.Single().Should().BeEquivalentTo(expectedVerblijfsobject);
         }
 
         [Fact]
