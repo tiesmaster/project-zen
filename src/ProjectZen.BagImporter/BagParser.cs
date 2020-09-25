@@ -17,6 +17,9 @@ namespace Tiesmaster.ProjectZen.BagImporter
         public static IEnumerable<BagPand> ParsePanden(string filename)
             => ParsePanden(XmlReader.Create(filename));
 
+        public static IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(string filename)
+            => ParseVerblijfsobjecten(XmlReader.Create(filename));
+
         public static IEnumerable<BagPand> ParsePanden(XmlReader xmlReader)
         {
             var xmlDocument = new XmlDocument();

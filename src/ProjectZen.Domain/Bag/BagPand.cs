@@ -36,6 +36,8 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         public string Id { get; }
         public BagVersion Version { get; }
         public ImmutableList<string> RelatedPanden { get; }
+
+        public bool IsActive(Instant referenceInstant) => Version.IsActive(referenceInstant);
     }
 
     public class BagNummeraanduiding

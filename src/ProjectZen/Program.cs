@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -21,10 +21,11 @@ namespace Tiesmaster.ProjectZen
         public static void Main()
         {
             var panden = ReadPanden();
+            var verblijfsobjecten = ReadVerblijfsobjecten();
 
-            var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
+            //var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
 
-            PersistBuildings(buildings);
+            //PersistBuildings(buildings);
         }
 
         private static IEnumerable<BagPand> ReadPanden()
@@ -36,7 +37,7 @@ namespace Tiesmaster.ProjectZen
 
             var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml");
 
-            pandFiles = pandFiles.Take(100);
+            pandFiles = pandFiles.Take(10);
 
             var allPanden = new List<BagPand>();
             var batchSw = Stopwatch.StartNew();
@@ -56,6 +57,37 @@ namespace Tiesmaster.ProjectZen
             Console.WriteLine($"Finished reading Panden (in {totalSw.Elapsed})");
 
             return allPanden;
+        }
+
+        private static IEnumerable<BagVerblijfsobject> ReadVerblijfsobjecten()
+        {
+            Console.WriteLine("Start reading Verblijfsobjecten");
+            var totalSw = Stopwatch.StartNew();
+
+            var referenceInstant = SystemClock.Instance.GetCurrentInstant();
+
+            var verblijfsobjectFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999VBO08082020-*.xml");
+
+            verblijfsobjectFiles = verblijfsobjectFiles.Take(10);
+
+            var allVerblijfsobjecten = new List<BagVerblijfsobject>();
+            var batchSw = Stopwatch.StartNew();
+            foreach (var (verblijfsobjectFile, index) in verblijfsobjectFiles.WithIndex())
+            {
+                Console.WriteLine($"Processing {Path.GetFileName(verblijfsobjectFile)}");
+                var singleFileSw = Stopwatch.StartNew();
+
+                allVerblijfsobjecten.AddRange(from verblijfsobject in BagParser.ParseVerblijfsobjecten(verblijfsobjectFile)
+                                              where verblijfsobject.IsActive(referenceInstant)
+                                              select verblijfsobject);
+
+                var totalFilesProcessed = index + 1;
+                Console.WriteLine($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total verblijfsobjecten: {allVerblijfsobjecten.Count:N0}");
+            }
+
+            Console.WriteLine($"Finished reading Verblijfsobjecten (in {totalSw.Elapsed})");
+
+            return allVerblijfsobjecten;
         }
 
         private static void PersistBuildings(IEnumerable<Building> buildings)
