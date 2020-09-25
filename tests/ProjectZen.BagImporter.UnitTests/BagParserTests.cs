@@ -303,7 +303,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
         }
 
         [Fact]
-        public void ParseNummberaanduidingen()
+        public void ParseNummberaanduidingen_AllOptionalValuesAbsent()
         {
             // arrange
             var xmlReader = XmlReader.Create(new StringReader(
@@ -328,7 +328,6 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
           <bag_LVC:aanduidingRecordCorrectie>0</bag_LVC:aanduidingRecordCorrectie>
           <bag_LVC:huisnummer>32</bag_LVC:huisnummer>
           <bag_LVC:officieel>N</bag_LVC:officieel>
-          <bag_LVC:postcode>6131BE</bag_LVC:postcode>
           <bag_LVC:tijdvakgeldigheid>
             <bagtype:begindatumTijdvakGeldigheid>2018032600000000</bagtype:begindatumTijdvakGeldigheid>
           </bag_LVC:tijdvakgeldigheid>
@@ -359,7 +358,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                 32,
                 null,
                 null,
-                "6131BE",
+                null,
                 "1883300000001522");
 
             // act
@@ -371,7 +370,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
         }
 
         [Fact]
-        public void ParseNummberaanduidingen_WithHouseLetterAndAddition()
+        public void ParseNummberaanduidingen_WithOptionalValuesPresent()
         {
             // arrange
             var xmlReader = XmlReader.Create(new StringReader(

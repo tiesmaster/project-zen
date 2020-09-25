@@ -172,7 +172,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
         private static string ParsePostalCode(XmlNode node)
         {
-            return node["bag_LVC:postcode"].InnerText;
+            return node["bag_LVC:postcode"]?.InnerText;
         }
 
         private static string ParseRelatedOpenbareRuimte(XmlNode node)
