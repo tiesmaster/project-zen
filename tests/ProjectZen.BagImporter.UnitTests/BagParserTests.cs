@@ -418,7 +418,9 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                 new BagVersion(
                     active: true,
                     correctionIndex: 0,
-                    new Interval(startInstant, Instant.MaxValue)));
+                    new Interval(startInstant, Instant.MaxValue)),
+                "Abel Eppensstraat",
+                "3386");
 
             // act
             var openbareRuimte = BagParser.ParseOpenbareRuimten(xmlReader);

@@ -127,7 +127,9 @@ namespace Tiesmaster.ProjectZen.BagImporter
         {
             return new BagOpenbareRuimte(
                 id: ParseId(node),
-                version: ParseBagVersion(node));
+                version: ParseBagVersion(node),
+                name: ParseOpenbareRuimteName(node),
+                relatedWoonplaats: ParseRelatedWoonplaats(node));
         }
 
         private static BagWoonplaats ParseWoonplaats(XmlNode node)
@@ -143,6 +145,11 @@ namespace Tiesmaster.ProjectZen.BagImporter
             return node["bag_LVC:identificatie"].InnerText;
         }
 
+        private static string ParseOpenbareRuimteName(XmlNode node)
+        {
+            return node["bag_LVC:openbareRuimteNaam"].InnerText;
+        }
+
         private static string ParseWoonplaatsName(XmlNode node)
         {
             return node["bag_LVC:woonplaatsNaam"].InnerText;
@@ -151,6 +158,11 @@ namespace Tiesmaster.ProjectZen.BagImporter
         private static int ParseConstructionYear(XmlNode node)
         {
             return ParseInt(node["bag_LVC:bouwjaar"]);
+        }
+
+        private static string ParseRelatedWoonplaats(XmlNode node)
+        {
+            return node["bag_LVC:gerelateerdeWoonplaats"].InnerText;
         }
 
         private static IEnumerable<string> ParseRelatedPanden(XmlNode node, XmlNamespaceManager namespaceManager)
