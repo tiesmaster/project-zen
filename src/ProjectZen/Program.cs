@@ -24,7 +24,7 @@ namespace Tiesmaster.ProjectZen
                 maxFilesToProcess);
 
             var panden = buildingImporter.ReadPanden();
-            //var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
+            var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
 
             //var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
 

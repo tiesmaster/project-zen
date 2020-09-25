@@ -26,35 +26,41 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
         public IEnumerable<Building> ReadBuildings() => throw new NotImplementedException();
 
-        public IEnumerable<BagPand> ReadPanden()
+        public IEnumerable<BagPand> ReadPanden() => ReadBagObjecten("PND", "Panden", BagParser.ParsePanden);
+        public IEnumerable<BagVerblijfsobject> ReadVerblijfsobjecten() => ReadBagObjecten("VBO", "Verblijfsobjecten", BagParser.ParseVerblijfsobjecten);
+
+        public IEnumerable<TBagObject> ReadBagObjecten<TBagObject>(
+            string bagObjectCode,
+            string bagObjectNamePlural,
+            Func<string, IEnumerable<TBagObject>> parseBagObjectsFile) where TBagObject : BagBase
         {
-            Console.WriteLine("Start reading Panden");
+            Console.WriteLine($"Start reading {bagObjectNamePlural}");
             var totalSw = Stopwatch.StartNew();
 
             var referenceInstant = _clock.GetCurrentInstant();
 
-            var pandFiles = Directory.EnumerateFiles(_bagXmlFilesPath, "9999PND*.xml");
+            var bagObjectFiles = Directory.EnumerateFiles(_bagXmlFilesPath, $"9999{bagObjectCode}*.xml");
 
-            pandFiles = pandFiles.Take(_maxFilesToProcess);
+            bagObjectFiles = bagObjectFiles.Take(_maxFilesToProcess);
 
-            var allPanden = new List<BagPand>();
+            var allBagObjects = new List<TBagObject>();
             var batchSw = Stopwatch.StartNew();
-            foreach (var (pandFile, index) in pandFiles.WithIndex())
+            foreach (var (bagObjectFile, index) in bagObjectFiles.WithIndex())
             {
-                Console.WriteLine($"Processing {Path.GetFileName(pandFile)}");
+                Console.WriteLine($"Processing {Path.GetFileName(bagObjectFile)}");
                 var singleFileSw = Stopwatch.StartNew();
 
-                allPanden.AddRange(from pand in BagParser.ParsePanden(pandFile)
-                                   where pand.IsActive(referenceInstant)
-                                   select pand);
+                allBagObjects.AddRange(from bagObject in parseBagObjectsFile(bagObjectFile)
+                                       where bagObject.IsActive(referenceInstant)
+                                       select bagObject);
 
                 var totalFilesProcessed = index + 1;
-                Console.WriteLine($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total panden: {allPanden.Count:N0}");
+                Console.WriteLine($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total {bagObjectNamePlural}: {allBagObjects.Count:N0}");
             }
 
             Console.WriteLine($"Finished reading Panden (in {totalSw.Elapsed})");
 
-            return allPanden;
+            return allBagObjects;
         }
     }
 }
