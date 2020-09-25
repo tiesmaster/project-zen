@@ -485,7 +485,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                 new BagVersion(
                     active: true,
                     correctionIndex: 0,
-                    new Interval(startInstant, Instant.MaxValue)));
+                    new Interval(startInstant, Instant.MaxValue)),
+                "Rotterdam");
 
             // act
             var woonplaats = BagParser.ParseWoonplaatsen(xmlReader);

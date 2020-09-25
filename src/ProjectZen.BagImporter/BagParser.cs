@@ -134,12 +134,18 @@ namespace Tiesmaster.ProjectZen.BagImporter
         {
             return new BagWoonplaats(
                 id: ParseId(node),
-                version: ParseBagVersion(node));
+                version: ParseBagVersion(node),
+                name: ParseWoonplaatsName(node));
         }
 
         private static string ParseId(XmlNode node)
         {
             return node["bag_LVC:identificatie"].InnerText;
+        }
+
+        private static string ParseWoonplaatsName(XmlNode node)
+        {
+            return node["bag_LVC:woonplaatsNaam"].InnerText;
         }
 
         private static int ParseConstructionYear(XmlNode node)

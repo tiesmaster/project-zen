@@ -13,11 +13,4 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         {
         }
     }
-
-    public class BagWoonplaats : BagBase
-    {
-        public BagWoonplaats(string id, BagVersion version) : base(id, version)
-        {
-        }
-    }
 }
