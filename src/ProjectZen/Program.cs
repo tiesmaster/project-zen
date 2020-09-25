@@ -25,6 +25,9 @@ namespace Tiesmaster.ProjectZen
 
             var panden = buildingImporter.ReadPanden();
             var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
+            var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
+            var openbareRuimten = buildingImporter.ReadOpenbareRuimten();
+            var woonplaatsen = buildingImporter.ReadWoonplaatsen();
 
             //var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
 
