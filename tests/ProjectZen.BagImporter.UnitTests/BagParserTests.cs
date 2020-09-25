@@ -275,7 +275,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             <bag_LVC:identificatie>0599100000634909</bag_LVC:identificatie>
           </bag_LVC:gerelateerdPand>
           <bag_LVC:gerelateerdPand>
-            <bag_LVC:identificatie>0599100000634910</bag_LVC:identificatie>
+            <bag_LVC:identificatie>0599100000634908</bag_LVC:identificatie>
           </bag_LVC:gerelateerdPand>
         </bag_LVC:Verblijfsobject>
       </product_LVC:LVC-product>
@@ -292,7 +292,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 "0599100000634909",
-                "0599100000634910");
+                "0599100000634908");
 
             // act
             var verblijfsobjecten = BagParser.ParseVerblijfsobjecten(xmlReader);
