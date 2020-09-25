@@ -1,12 +1,7 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Xml;
 
-namespace Tiesmaster.ProjectZen
+namespace Tiesmaster.ProjectZen.BagImporter
 {
-
     public static class EnumerableExtensions
     {
         public static IEnumerable<(T, int)> WithIndex<T>(this IEnumerable<T> source)

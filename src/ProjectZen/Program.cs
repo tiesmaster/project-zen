@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 using MoreLinq;
 
@@ -12,7 +10,6 @@ using Raven.Client.Documents;
 
 using Tiesmaster.ProjectZen.BagImporter;
 using Tiesmaster.ProjectZen.Domain;
-using Tiesmaster.ProjectZen.Domain.Bag;
 
 namespace Tiesmaster.ProjectZen
 {
@@ -20,74 +17,18 @@ namespace Tiesmaster.ProjectZen
     {
         public static void Main()
         {
-            var panden = ReadPanden();
-            var verblijfsobjecten = ReadVerblijfsobjecten();
+            var maxFilesToProcess = 10;
+            var buildingImporter = new BuildingBagImporter(
+                SystemClock.Instance,
+                "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
+                maxFilesToProcess);
+
+            var panden = buildingImporter.ReadPanden();
+            //var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
 
             //var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
 
             //PersistBuildings(buildings);
-        }
-
-        private static IEnumerable<BagPand> ReadPanden()
-        {
-            Console.WriteLine("Start reading Panden");
-            var totalSw = Stopwatch.StartNew();
-
-            var referenceInstant = SystemClock.Instance.GetCurrentInstant();
-
-            var pandFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999PND08082020-*.xml");
-
-            pandFiles = pandFiles.Take(10);
-
-            var allPanden = new List<BagPand>();
-            var batchSw = Stopwatch.StartNew();
-            foreach (var (pandFile, index) in pandFiles.WithIndex())
-            {
-                Console.WriteLine($"Processing {Path.GetFileName(pandFile)}");
-                var singleFileSw = Stopwatch.StartNew();
-
-                allPanden.AddRange(from pand in BagParser.ParsePanden(pandFile)
-                                   where pand.IsActive(referenceInstant)
-                                   select pand);
-
-                var totalFilesProcessed = index + 1;
-                Console.WriteLine($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total panden: {allPanden.Count:N0}");
-            }
-
-            Console.WriteLine($"Finished reading Panden (in {totalSw.Elapsed})");
-
-            return allPanden;
-        }
-
-        private static IEnumerable<BagVerblijfsobject> ReadVerblijfsobjecten()
-        {
-            Console.WriteLine("Start reading Verblijfsobjecten");
-            var totalSw = Stopwatch.StartNew();
-
-            var referenceInstant = SystemClock.Instance.GetCurrentInstant();
-
-            var verblijfsobjectFiles = Directory.EnumerateFiles("c:/src/projects/project-zen/tmp/small-zips-unpacked/", "9999VBO08082020-*.xml");
-
-            verblijfsobjectFiles = verblijfsobjectFiles.Take(10);
-
-            var allVerblijfsobjecten = new List<BagVerblijfsobject>();
-            var batchSw = Stopwatch.StartNew();
-            foreach (var (verblijfsobjectFile, index) in verblijfsobjectFiles.WithIndex())
-            {
-                Console.WriteLine($"Processing {Path.GetFileName(verblijfsobjectFile)}");
-                var singleFileSw = Stopwatch.StartNew();
-
-                allVerblijfsobjecten.AddRange(from verblijfsobject in BagParser.ParseVerblijfsobjecten(verblijfsobjectFile)
-                                              where verblijfsobject.IsActive(referenceInstant)
-                                              select verblijfsobject);
-
-                var totalFilesProcessed = index + 1;
-                Console.WriteLine($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total verblijfsobjecten: {allVerblijfsobjecten.Count:N0}");
-            }
-
-            Console.WriteLine($"Finished reading Verblijfsobjecten (in {totalSw.Elapsed})");
-
-            return allVerblijfsobjecten;
         }
 
         private static void PersistBuildings(IEnumerable<Building> buildings)
