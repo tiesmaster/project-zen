@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 using MoreLinq;
 
@@ -23,15 +24,16 @@ namespace Tiesmaster.ProjectZen
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
 
+            //var woonplaatsen = buildingImporter.ReadWoonplaatsen();
+
             var panden = buildingImporter.ReadPanden();
-            var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
-            var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
-            var openbareRuimten = buildingImporter.ReadOpenbareRuimten();
-            var woonplaatsen = buildingImporter.ReadWoonplaatsen();
+            //var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
+            //var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
+            //var openbareRuimten = buildingImporter.ReadOpenbareRuimten();
 
-            //var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
+            var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
 
-            //PersistBuildings(buildings);
+            PersistBuildings(buildings);
         }
 
         private static void PersistBuildings(IEnumerable<Building> buildings)
