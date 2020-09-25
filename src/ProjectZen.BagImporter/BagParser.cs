@@ -21,6 +21,15 @@ namespace Tiesmaster.ProjectZen.BagImporter
         public static IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(string filename)
             => ParseVerblijfsobjecten(XmlReader.Create(filename));
 
+        public static IEnumerable<BagNummeraanduiding> ParseNummeraanduidingen(string filename)
+            => ParseNummeraanduidingen(XmlReader.Create(filename));
+
+        public static IEnumerable<BagOpenbareRuimte> ParseOpenbareRuimten(string filename)
+            => ParseOpenbareRuimten(XmlReader.Create(filename));
+
+        public static IEnumerable<BagWoonplaats> ParseWoonplaatsen(string filename)
+            => ParseWoonplaatsen(XmlReader.Create(filename));
+
         public static IEnumerable<BagPand> ParsePanden(XmlReader xmlReader)
         {
             return ParseBagObject(
