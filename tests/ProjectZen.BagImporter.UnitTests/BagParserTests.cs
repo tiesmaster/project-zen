@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -67,12 +68,12 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 
             var startInstant = Instant.FromUtc(2015, 10, 09, 00, 00);
             var expectedPand = new BagPand(
-                "0599100000661089",
-                new BagVersion(
+                id: "0599100000661089",
+                version: new BagVersion(
                     active: true,
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
-                1942);
+                constructionYear: 1942);
 
             // act
             var panden = BagParser.ParsePanden(xmlReader);
@@ -137,12 +138,12 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var startInstant = Instant.FromUtc(2015, 10, 09, 00, 00);
             var endInstant = Instant.FromUtc(2016, 10, 09, 00, 00);
             var expectedPand = new BagPand(
-                "0599100000661089",
-                new BagVersion(
+                id: "0599100000661089",
+                version: new BagVersion(
                     active: true,
                     correctionIndex: 0,
                     new Interval(startInstant, endInstant)),
-                1942);
+                constructionYear: 1942);
 
             // act
             var panden = BagParser.ParsePanden(xmlReader);
@@ -153,7 +154,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
         }
 
         [Fact]
-        public void ParseVerblijfsobject()
+        public void ParseVerblijfsobject_OnlySingleRelatedPandAndAddress()
         {
             // arrange
             var xmlReader = XmlReader.Create(new StringReader(
@@ -210,12 +211,13 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 
             var startInstant = Instant.FromUtc(1993, 11, 30, 00, 00);
             var expectedVerblijfsobject = new BagVerblijfsobject(
-                "0599010000253867",
-                new BagVersion(
+                id: "0599010000253867",
+                version: new BagVersion(
                     active: true,
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
-                "0599100000634909");
+                relatedMainAddress: "0599200000300941",
+                relatedPanden: "0599100000634909");
 
             // act
             var verblijfsobjecten = BagParser.ParseVerblijfsobjecten(xmlReader);
@@ -226,7 +228,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
         }
 
         [Fact]
-        public void ParseVerblijfsobject_MultipleRelatedPanden()
+        public void ParseVerblijfsobject_MultipleOfRelatedPandenAndAddresses()
         {
             // arrange
             var xmlReader = XmlReader.Create(new StringReader(
@@ -250,6 +252,12 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             <bag_LVC:hoofdadres>
               <bag_LVC:identificatie>0599200000300941</bag_LVC:identificatie>
             </bag_LVC:hoofdadres>
+            <bag_LVC:nevenadres>
+              <bag_LVC:identificatie>0014200022197685</bag_LVC:identificatie>
+            </bag_LVC:nevenadres>
+            <bag_LVC:nevenadres>
+              <bag_LVC:identificatie>0014200040356445</bag_LVC:identificatie>
+            </bag_LVC:nevenadres>
           </bag_LVC:gerelateerdeAdressen>
           <bag_LVC:identificatie>0599010000253867</bag_LVC:identificatie>
           <bag_LVC:aanduidingRecordInactief>N</bag_LVC:aanduidingRecordInactief>
@@ -286,13 +294,18 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 
             var startInstant = Instant.FromUtc(1993, 11, 30, 00, 00);
             var expectedVerblijfsobject = new BagVerblijfsobject(
-                "0599010000253867",
-                new BagVersion(
+                id: "0599010000253867",
+                version: new BagVersion(
                     active: true,
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
-                "0599100000634909",
-                "0599100000634908");
+                relatedMainAddress: "0599200000300941",
+                relatedAdditionalAddresses: ImmutableList.Create(
+                    "0014200022197685",
+                    "0014200040356445"),
+                relatedPanden: ImmutableList.Create(
+                    "0599100000634909",
+                    "0599100000634908"));
 
             // act
             var verblijfsobjecten = BagParser.ParseVerblijfsobjecten(xmlReader);
@@ -350,16 +363,16 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 
             var startInstant = Instant.FromUtc(2018, 03, 26, 00, 00);
             var expectedNummeraanduiding = new BagNummeraanduiding(
-                "0000200000057534",
-                new BagVersion(
+                id: "0000200000057534",
+                version: new BagVersion(
                     active: true,
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
-                32,
-                null,
-                null,
-                null,
-                "1883300000001522");
+                houseNumber: 32,
+                houseLetter: null,
+                houseNumberAddition: null,
+                postalCode: null,
+                relatedOpenbareRuimte: "1883300000001522");
 
             // act
             var nummeraanduiding = BagParser.ParseNummeraanduidingen(xmlReader);
@@ -420,16 +433,16 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 
             var startInstant = Instant.FromUtc(2018, 03, 26, 00, 00);
             var expectedNummeraanduiding = new BagNummeraanduiding(
-                "0000200000057534",
-                new BagVersion(
+                id: "0000200000057534",
+                version: new BagVersion(
                     active: true,
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
-                32,
-                'A',
-                "123",
-                "6131BE",
-                "1883300000001522");
+                houseNumber: 32,
+                houseLetter: 'A',
+                houseNumberAddition: "123",
+                postalCode: "6131BE",
+                relatedOpenbareRuimte: "1883300000001522");
 
             // act
             var nummeraanduiding = BagParser.ParseNummeraanduidingen(xmlReader);
@@ -487,13 +500,13 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 
             var startInstant = Instant.FromUtc(1956, 03, 28, 00, 00);
             var expectedOpenbareRuimte = new BagOpenbareRuimte(
-                "0003300000116985",
-                new BagVersion(
+                id: "0003300000116985",
+                version: new BagVersion(
                     active: true,
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
-                "Abel Eppensstraat",
-                "3386");
+                name: "Abel Eppensstraat",
+                relatedWoonplaats: "3386");
 
             // act
             var openbareRuimte = BagParser.ParseOpenbareRuimten(xmlReader);
@@ -556,12 +569,12 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 
             var startInstant = Instant.FromUtc(2020, 02, 27, 00, 00, 01);
             var expectedWoonplaats = new BagWoonplaats(
-                "3086",
-                new BagVersion(
+                id: "3086",
+                version: new BagVersion(
                     active: true,
                     correctionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
-                "Rotterdam");
+                name: "Rotterdam");
 
             // act
             var woonplaats = BagParser.ParseWoonplaatsen(xmlReader);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
@@ -113,7 +114,9 @@ namespace Tiesmaster.ProjectZen.BagImporter
             return new BagVerblijfsobject(
                 id: ParseId(node),
                 version: ParseBagVersion(node),
-                relatedPanden: ParseRelatedPanden(node, namespaceManager).ToArray());
+                relatedMainAddress: ParseRelatedMainAddress(node),
+                relatedAdditionalAddresses: ParseRelatedAdditionalAddresses(node, namespaceManager).ToImmutableList(),
+                relatedPanden: ParseRelatedPanden(node, namespaceManager).ToImmutableList());
         }
 
         private static BagNummeraanduiding ParseNummeraanduiding(XmlNode node)
@@ -193,6 +196,22 @@ namespace Tiesmaster.ProjectZen.BagImporter
         private static string ParseRelatedWoonplaats(XmlNode node)
         {
             return node["bag_LVC:gerelateerdeWoonplaats"].InnerText;
+        }
+
+        private static string ParseRelatedMainAddress(XmlNode node)
+        {
+            return node["bag_LVC:gerelateerdeAdressen"]["bag_LVC:hoofdadres"].InnerText;
+        }
+
+        private static IEnumerable<string> ParseRelatedAdditionalAddresses(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            var relatedAddresses = node["bag_LVC:gerelateerdeAdressen"];
+
+            var relatedAdditionalAddresses = relatedAddresses.SelectNodes("bag_LVC:nevenadres", namespaceManager);
+            foreach (XmlNode relatedAdditionalAddress in relatedAdditionalAddresses)
+            {
+                yield return relatedAdditionalAddress.InnerText;
+            }
         }
 
         private static IEnumerable<string> ParseRelatedPanden(XmlNode node, XmlNamespaceManager namespaceManager)
