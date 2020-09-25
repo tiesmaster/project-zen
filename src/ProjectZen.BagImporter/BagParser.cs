@@ -85,6 +85,23 @@ namespace Tiesmaster.ProjectZen.BagImporter
                    select ParseOpenbareRuimte(node);
         }
 
+        public static IEnumerable<BagWoonplaats> ParseWoonplaatsen(XmlReader xmlReader)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(xmlReader);
+
+            var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
+            namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
+            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
+            namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
+            namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
+
+            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Woonplaats", namespaceManager);
+
+            return from XmlNode node in nodes
+                   select ParseWoonplaats(node);
+        }
+
         private static BagPand ParsePand(XmlNode node)
         {
             return new BagPand(
@@ -111,6 +128,13 @@ namespace Tiesmaster.ProjectZen.BagImporter
         private static BagOpenbareRuimte ParseOpenbareRuimte(XmlNode node)
         {
             return new BagOpenbareRuimte(
+                id: ParseId(node),
+                version: ParseBagVersion(node));
+        }
+
+        private static BagWoonplaats ParseWoonplaats(XmlNode node)
+        {
+            return new BagWoonplaats(
                 id: ParseId(node),
                 version: ParseBagVersion(node));
         }
