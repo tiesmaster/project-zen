@@ -1,0 +1,9 @@
+version: "3"
+services:
+  ravendb:
+    image: ravendb/ravendb
+    ports:
+      - "8080:8080"
+    environment:
+      RAVEN_License_Eula_Accepted: "true"
+      RAVEN_Setup_Mode: None
