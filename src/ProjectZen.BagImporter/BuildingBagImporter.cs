@@ -61,7 +61,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 Console.WriteLine($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total {bagObjectNamePlural}: {allBagObjects.Count:N0}");
             }
 
-            Console.WriteLine($"Finished reading Panden (in {totalSw.Elapsed})");
+            Console.WriteLine($"Finished reading {bagObjectNamePlural} (in {totalSw.Elapsed})");
 
             return allBagObjects;
         }

@@ -16,27 +16,26 @@ namespace Tiesmaster.ProjectZen
     {
         public static void Main()
         {
-            var maxFilesToProcess = 20;
+            var maxFilesToProcess = 100;
             var buildingImporter = new BuildingBagImporter(
                 SystemClock.Instance,
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            //var woonplaatsen = buildingImporter.ReadWoonplaatsen();
-            //PersistToRavenDB(woonplaatsen);
+            var woonplaatsen = buildingImporter.ReadWoonplaatsen();
+            PersistToRavenDB(woonplaatsen);
 
-            //var openbareRuimten = buildingImporter.ReadOpenbareRuimten();
-            //PersistToRavenDB(openbareRuimten);
+            var openbareRuimten = buildingImporter.ReadOpenbareRuimten();
+            PersistToRavenDB(openbareRuimten);
 
-            //var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
-            //PersistToRavenDB(nummeraanduidingen);
+            var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
+            PersistToRavenDB(nummeraanduidingen);
 
             var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
             PersistToRavenDB(verblijfsobjecten);
 
-            //var panden = buildingImporter.ReadPanden();
-            //var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
-            //var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
+            var panden = buildingImporter.ReadPanden();
+            PersistToRavenDB(panden);
 
             //var buildings = panden.Select(x => new Building(x.Id, x.ConstructionYear));
 
