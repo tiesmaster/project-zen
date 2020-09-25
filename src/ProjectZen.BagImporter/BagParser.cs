@@ -51,6 +51,23 @@ namespace Tiesmaster.ProjectZen.BagImporter
                    select ParseVerblijfsObject(node, namespaceManager);
         }
 
+        public static IEnumerable<BagNummeraanduiding> ParseNummeraanduidingen(XmlReader xmlReader)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(xmlReader);
+
+            var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
+            namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
+            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
+            namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
+            namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
+
+            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Nummeraanduiding", namespaceManager);
+
+            return from XmlNode node in nodes
+                   select ParseNummeraanduiding(node, namespaceManager);
+        }
+
         private static BagPand ParsePand(XmlNode node)
         {
             return new BagPand(
@@ -65,6 +82,13 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 id: ParseId(node),
                 version: ParseBagVersion(node),
                 relatedPanden: ParseRelatedPanden(node, namespaceManager).ToArray());
+        }
+
+        private static BagNummeraanduiding ParseNummeraanduiding(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            return new BagNummeraanduiding(
+                id: ParseId(node),
+                version: ParseBagVersion(node));
         }
 
         private static string ParseId(XmlNode node)
