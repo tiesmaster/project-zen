@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -22,87 +23,72 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
         public static IEnumerable<BagPand> ParsePanden(XmlReader xmlReader)
         {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlReader);
-
-            var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
-            namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
-            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
-            namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
-            namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
-
-            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Pand", namespaceManager);
-
-            return from XmlNode node in nodes
-                   select ParsePand(node);
+            return ParseBagObject(
+                xmlReader,
+                "Pand",
+                (node, _) => ParsePand(node));
         }
 
         public static IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(XmlReader xmlReader)
         {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlReader);
-
-            var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
-            namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
-            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
-            namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
-            namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
-
-            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Verblijfsobject", namespaceManager);
-
-            return from XmlNode node in nodes
-                   select ParseVerblijfsobject(node, namespaceManager);
+            return ParseBagObject(
+                xmlReader,
+                "Verblijfsobject",
+                ParseVerblijfsobject);
         }
 
         public static IEnumerable<BagNummeraanduiding> ParseNummeraanduidingen(XmlReader xmlReader)
         {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlReader);
-
-            var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
-            namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
-            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
-            namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
-            namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
-
-            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Nummeraanduiding", namespaceManager);
-
-            return from XmlNode node in nodes
-                   select ParseNummeraanduiding(node);
+            return ParseBagObject(
+                xmlReader,
+                "Nummeraanduiding",
+                (node, _) => ParseNummeraanduiding(node));
         }
 
         public static IEnumerable<BagOpenbareRuimte> ParseOpenbareRuimten(XmlReader xmlReader)
         {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.Load(xmlReader);
-
-            var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
-            namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
-            namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
-            namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
-            namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
-
-            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:OpenbareRuimte", namespaceManager);
-
-            return from XmlNode node in nodes
-                   select ParseOpenbareRuimte(node);
+            return ParseBagObject(
+                xmlReader,
+                "OpenbareRuimte",
+                (node, _) => ParseOpenbareRuimte(node));
         }
 
         public static IEnumerable<BagWoonplaats> ParseWoonplaatsen(XmlReader xmlReader)
         {
+            return ParseBagObject(
+                xmlReader,
+                "Woonplaats",
+                (node, _) => ParseWoonplaats(node));
+        }
+
+        private static IEnumerable<TBagObject> ParseBagObject<TBagObject>(
+            XmlReader xmlReader,
+            string xmlNodeName,
+            Func<XmlNode, XmlNamespaceManager, TBagObject> parseBagObject) where TBagObject : BagBase
+        {
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(xmlReader);
 
+            var namespaceManager = GetNamespaceManager(xmlDocument);
+
+            var nodes = xmlDocument.SelectNodes(
+                $"/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:{xmlNodeName}",
+                namespaceManager);
+
+            return from XmlNode node in nodes
+                   select parseBagObject(node, namespaceManager);
+        }
+
+        private static XmlNamespaceManager GetNamespaceManager(XmlDocument xmlDocument)
+        {
             var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
+
             namespaceManager.AddNamespace("xb", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901");
             namespaceManager.AddNamespace("gml", "http://www.opengis.net/gml");
             namespaceManager.AddNamespace("product_LVC", "http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901");
             namespaceManager.AddNamespace("bag_LVC", "http://www.kadaster.nl/schemas/imbag/lvc/v20090901");
 
-            var nodes = xmlDocument.SelectNodes("/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:Woonplaats", namespaceManager);
-
-            return from XmlNode node in nodes
-                   select ParseWoonplaats(node);
+            return namespaceManager;
         }
 
         private static BagPand ParsePand(XmlNode node)
