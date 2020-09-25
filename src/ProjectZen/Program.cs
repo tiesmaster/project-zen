@@ -28,6 +28,9 @@ namespace Tiesmaster.ProjectZen
             var openbareRuimten = buildingImporter.ReadOpenbareRuimten();
             PersistToRavenDB(openbareRuimten);
 
+            var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
+            PersistToRavenDB(nummeraanduidingen);
+
             //var panden = buildingImporter.ReadPanden();
             //var verblijfsobjecten = buildingImporter.ReadVerblijfsobjecten();
             //var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
