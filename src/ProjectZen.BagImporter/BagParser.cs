@@ -120,7 +120,12 @@ namespace Tiesmaster.ProjectZen.BagImporter
         {
             return new BagNummeraanduiding(
                 id: ParseId(node),
-                version: ParseBagVersion(node));
+                version: ParseBagVersion(node),
+                houseNumber: ParseHouseNumber(node),
+                houseLetter: ParseHouseLetter(node),
+                houseNumberAddition: ParseHouseNumberAddition(node),
+                postalCode: ParsePostalCode(node),
+                relatedOpenbareRuimte: ParseRelatedOpenbareRuimte(node));
         }
 
         private static BagOpenbareRuimte ParseOpenbareRuimte(XmlNode node)
@@ -148,6 +153,31 @@ namespace Tiesmaster.ProjectZen.BagImporter
         private static string ParseOpenbareRuimteName(XmlNode node)
         {
             return node["bag_LVC:openbareRuimteNaam"].InnerText;
+        }
+
+        private static int ParseHouseNumber(XmlNode node)
+        {
+            return ParseInt(node["bag_LVC:huisnummer"]);
+        }
+
+        private static char ParseHouseLetter(XmlNode node)
+        {
+            return node["bag_LVC:huisletter"].InnerText.Single();
+        }
+
+        private static string ParseHouseNumberAddition(XmlNode node)
+        {
+            return node["bag_LVC:huisnummertoevoeging"]?.InnerText;
+        }
+
+        private static string ParsePostalCode(XmlNode node)
+        {
+            return node["bag_LVC:postcode"].InnerText;
+        }
+
+        private static string ParseRelatedOpenbareRuimte(XmlNode node)
+        {
+            return node["bag_LVC:gerelateerdeOpenbareRuimte"].InnerText;
         }
 
         private static string ParseWoonplaatsName(XmlNode node)

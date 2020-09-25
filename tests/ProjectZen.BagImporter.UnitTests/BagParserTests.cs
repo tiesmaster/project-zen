@@ -356,7 +356,12 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                 new BagVersion(
                     active: true,
                     correctionIndex: 0,
-                    new Interval(startInstant, Instant.MaxValue)));
+                    new Interval(startInstant, Instant.MaxValue)),
+                32,
+                'A',
+                null,
+                "6131BE",
+                "1883300000001522");
 
             // act
             var nummeraanduiding = BagParser.ParseNummeraanduidingen(xmlReader);
