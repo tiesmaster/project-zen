@@ -6,7 +6,7 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
             string id,
             BagVersion version,
             int houseNumber,
-            char houseLetter,
+            char? houseLetter,
             string houseNumberAddition,
             string postalCode,
             string relatedOpenbareRuimte) : base(id, version)
@@ -19,7 +19,7 @@ namespace Tiesmaster.ProjectZen.Domain.Bag
         }
 
         public int HouseNumber { get; }
-        public char HouseLetter { get; }
+        public char? HouseLetter { get; }
         public string HouseNumberAddition { get; }
         public string PostalCode { get; }
         public string RelatedOpenbareRuimte { get; }

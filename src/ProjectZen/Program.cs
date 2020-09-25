@@ -22,11 +22,11 @@ namespace Tiesmaster.ProjectZen
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            var woonplaatsen = buildingImporter.ReadWoonplaatsen();
-            PersistToRavenDB(woonplaatsen);
+            //var woonplaatsen = buildingImporter.ReadWoonplaatsen();
+            //PersistToRavenDB(woonplaatsen);
 
-            var openbareRuimten = buildingImporter.ReadOpenbareRuimten();
-            PersistToRavenDB(openbareRuimten);
+            //var openbareRuimten = buildingImporter.ReadOpenbareRuimten();
+            //PersistToRavenDB(openbareRuimten);
 
             var nummeraanduidingen = buildingImporter.ReadNummeraanduidingen();
             PersistToRavenDB(nummeraanduidingen);

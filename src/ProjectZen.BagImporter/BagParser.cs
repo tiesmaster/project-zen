@@ -160,9 +160,9 @@ namespace Tiesmaster.ProjectZen.BagImporter
             return ParseInt(node["bag_LVC:huisnummer"]);
         }
 
-        private static char ParseHouseLetter(XmlNode node)
+        private static char? ParseHouseLetter(XmlNode node)
         {
-            return node["bag_LVC:huisletter"].InnerText.Single();
+            return node["bag_LVC:huisletter"]?.InnerText?.Single();
         }
 
         private static string ParseHouseNumberAddition(XmlNode node)
