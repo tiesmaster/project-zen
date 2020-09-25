@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-using MoreLinq;
-
 using NodaTime;
 
 using Raven.Client.Documents;
@@ -18,7 +16,7 @@ namespace Tiesmaster.ProjectZen
     {
         public static void Main()
         {
-            var maxFilesToProcess = 10;
+            var maxFilesToProcess = 100;
             var buildingImporter = new BuildingBagImporter(
                 SystemClock.Instance,
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
@@ -43,20 +41,10 @@ namespace Tiesmaster.ProjectZen
 
             using var store = OpenDocumentStore();
 
-            foreach (var (buildingBatch, index) in buildings.Batch(10_000).WithIndex())
+            var bulkInsert = store.BulkInsert();
+            foreach (var building in buildings)
             {
-                Console.WriteLine($"Saving batch {index}");
-                var batchSw = Stopwatch.StartNew();
-
-                using var session = store.OpenSession();
-                foreach (var building in buildingBatch)
-                {
-                    session.Store(building);
-                }
-
-                session.SaveChanges();
-
-                Console.WriteLine($"Saved batch {index} (in {batchSw.Elapsed})");
+                bulkInsert.Store(building);
             }
 
             Console.WriteLine($"Finished persisting Buildings (in {totalSw.Elapsed})");
