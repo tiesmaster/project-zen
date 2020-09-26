@@ -16,14 +16,16 @@ namespace Tiesmaster.ProjectZen
     {
         public static void Main()
         {
-            var maxFilesToProcess = 1000;
+            var maxFilesToProcess = 100;
             var buildingImporter = new BuildingBagImporter(
                 SystemClock.Instance,
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            var buildings = buildingImporter.ReadBuildings();
-            PersistToRavenDB(buildings);
+            buildingImporter.ReadNummeraanduidingen();
+
+            //var buildings = buildingImporter.ReadBuildings();
+            //PersistToRavenDB(buildings);
         }
 
         private static void PersistToRavenDB(IEnumerable<object> objects)
