@@ -24,8 +24,6 @@ namespace Tiesmaster.ProjectZen.BagImporter
             _maxFilesToProcess = maxFilesToProcess;
         }
 
-        public IEnumerable<Building> ReadBuildings() => throw new NotImplementedException();
-
         public IEnumerable<BagPand> ReadPanden() => ReadBagObjecten("PND", "Panden", BagParser.ParsePanden);
         public IEnumerable<BagVerblijfsobject> ReadVerblijfsobjecten() => ReadBagObjecten("VBO", "Verblijfsobjecten", BagParser.ParseVerblijfsobjecten);
         public IEnumerable<BagNummeraanduiding> ReadNummeraanduidingen() => ReadBagObjecten("NUM", "Nummeraanduidingen", BagParser.ParseNummeraanduidingen);
@@ -64,6 +62,58 @@ namespace Tiesmaster.ProjectZen.BagImporter
             Console.WriteLine($"Finished reading {bagObjectNamePlural} (in {totalSw.Elapsed})");
 
             return allBagObjects;
+        }
+
+        // draft code
+
+        public IEnumerable<Building> ReadBuildings()
+        {
+            var woonplaatsen = ReadWoonplaatsen().ToDictionary(x => x.Id, x => x);
+
+            var openbareRuimten = ReadOpenbareRuimten().ToDictionary(x => x.Id, x => x);
+
+            var nummeraanduidingen = ReadNummeraanduidingen().ToDictionary(x => x.Id, x => x);
+
+            var pandVboMapping = ReadVerblijfsobjecten()
+                .SelectMany(x => x.RelatedPanden, (vbo, pandId) => (vbo, pandId))
+                .GroupBy(x => x.pandId)
+                .ToDictionary(x => x.Key, x => x.Select(x => x.vbo).First());
+
+            var panden = ReadPanden();
+
+            return panden.Select(pand => ToBuilding(pand, pandVboMapping, nummeraanduidingen, openbareRuimten, woonplaatsen));
+        }
+
+        private static Building ToBuilding(
+            BagPand pand,
+            Dictionary<string, BagVerblijfsobject> verblijfsobjecten,
+            Dictionary<string, BagNummeraanduiding> nummeraanduidingen,
+            Dictionary<string, BagOpenbareRuimte> openbareRuimten,
+            Dictionary<string, BagWoonplaats> woonplaatsen)
+        {
+            Address GetAddress(BagVerblijfsobject relatedVbo)
+            {
+                var relatedNum = nummeraanduidingen[relatedVbo.RelatedMainAddress];
+                var relatedOpr = openbareRuimten[relatedNum.RelatedOpenbareRuimte];
+                var relatedWpl = woonplaatsen[relatedOpr.RelatedWoonplaats];
+
+                return new Address(
+                    relatedOpr.Name,
+                    relatedNum.HouseNumber,         // TODO: Join these...
+                    relatedNum.HouseLetter,
+                    relatedNum.HouseNumberAddition,
+                    relatedNum.PostalCode,
+                    relatedWpl.Name);
+            }
+
+            var address = verblijfsobjecten.TryGetValue(pand.Id, out var relatedVbo)
+                ? GetAddress(relatedVbo)
+                : null;
+
+            return new Building(
+                pand.Id,
+                pand.ConstructionYear,
+                address);
         }
     }
 }
