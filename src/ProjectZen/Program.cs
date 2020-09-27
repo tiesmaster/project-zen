@@ -38,6 +38,8 @@ namespace Tiesmaster.ProjectZen
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
+                .Enrich.WithProperty("ApplicationName", "ProjectZen")
+                .Enrich.FromLogContext()
                 .WriteTo.ColoredConsole()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
