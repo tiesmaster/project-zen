@@ -45,6 +45,7 @@ namespace Tiesmaster.ProjectZen
 
         private static void PersistToRavenDB(IEnumerable<object> objects)
         {
+            // Expand logging: add name of type of thing we're persisting via generic method argument? (or just a parameter)
             Log.Information("Start persisting");
             var totalSw = Stopwatch.StartNew();
 
@@ -53,7 +54,8 @@ namespace Tiesmaster.ProjectZen
             var bulkInsert = store.BulkInsert();
             foreach (var (objectBatch, index) in objects.Batch(10_000).WithIndex())
             {
-                Log.Information($"Saving batch {index}");
+                // Pull name of BAG object in here via PushProperty
+                Log.Debug("Saving batch {batchIndex}", index);
                 var batchSw = Stopwatch.StartNew();
 
                 foreach (var building in objectBatch)
@@ -61,10 +63,10 @@ namespace Tiesmaster.ProjectZen
                     bulkInsert.Store(building);
                 }
 
-                Log.Information($"Saved batch {index} of 10.000 (in {batchSw.Elapsed})");
+                Log.Debug("Saved batch {batchIndex} of 10.000 (in {batchElapsed})", index, batchSw.Elapsed);
             }
 
-            Log.Information($"Finished persisting objects (in {totalSw.Elapsed})");
+            Log.Information("Finished persisting objects (in {totalElapsed})", totalSw.Elapsed);
         }
 
         private static DocumentStore OpenDocumentStore()
@@ -89,11 +91,11 @@ namespace Tiesmaster.ProjectZen
             {
                 Log.Information("RavenDB database {DatabaseName} is absent. Creating database...", databaseName);
                 documentStore.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord(databaseName)));
-                Log.Information("RavenDB database {DatabaseName} created.", databaseName);
+                Log.Information("RavenDB database {DatabaseName} created", databaseName);
             }
             else
             {
-                Log.Debug("RavenDB database {DatabaseName} already exists. Skipping creation.", databaseName);
+                Log.Debug("RavenDB database {DatabaseName} already exists. Skipping creation", databaseName);
             }
         }
     }

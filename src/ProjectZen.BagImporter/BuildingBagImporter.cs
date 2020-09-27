@@ -37,7 +37,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             string bagObjectNamePlural,
             Func<string, IEnumerable<TBagObject>> parseBagObjectsFile) where TBagObject : BagBase
         {
-            Log.Information($"Start reading {bagObjectNamePlural}");
+            Log.Information("Start reading {BagObjectName}", bagObjectNamePlural);
             var totalSw = Stopwatch.StartNew();
 
             var referenceInstant = _clock.GetCurrentInstant();
@@ -50,7 +50,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             var batchSw = Stopwatch.StartNew();
             foreach (var (bagObjectFile, index) in bagObjectFiles.WithIndex())
             {
-                Log.Information($"Processing {Path.GetFileName(bagObjectFile)}");
+                Log.Debug("Processing {BagObjectFileName}", Path.GetFileName(bagObjectFile));
                 var singleFileSw = Stopwatch.StartNew();
 
                 allBagObjects.AddRange(from bagObject in parseBagObjectsFile(bagObjectFile)
@@ -58,10 +58,15 @@ namespace Tiesmaster.ProjectZen.BagImporter
                                        select bagObject);
 
                 var totalFilesProcessed = index + 1;
-                Log.Information($"Processed in: {singleFileSw.Elapsed} (Average: {batchSw.Elapsed / totalFilesProcessed}) | Total {bagObjectNamePlural}: {allBagObjects.Count:N0}");
+                Log.Debug(
+                    "Processed in: {SingleFileElapsed} (Average: {AverageElapsedPerFile}) | Total {BagObjectName}: {TotalBagObjectsRead}",
+                    singleFileSw.Elapsed,
+                    batchSw.Elapsed / totalFilesProcessed,
+                    bagObjectNamePlural,
+                    allBagObjects.Count);
             }
 
-            Log.Information($"Finished reading {bagObjectNamePlural} (in {totalSw.Elapsed})");
+            Log.Information("Finished reading {BagObjectName} (in {TotalElapsed})", bagObjectNamePlural, totalSw.Elapsed);
 
             return allBagObjects;
         }
