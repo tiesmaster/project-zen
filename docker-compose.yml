@@ -14,3 +14,8 @@ services:
       - "15341:80"
     environment:
       ACCEPT_EULA: "Y"
+    volumes:
+      - seq-data-volume:/data
+
+volumes:
+  seq-data-volume:
