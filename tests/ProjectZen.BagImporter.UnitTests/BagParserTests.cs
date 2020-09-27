@@ -583,5 +583,53 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             woonplaats.Should().ContainSingle();
             woonplaats.Single().Should().BeEquivalentTo(expectedWoonplaats);
         }
+
+        [Fact]
+        public void ParseInvalidObject()
+        {
+            // arrange
+            var xmlReader = XmlReader.Create(new StringReader(
+@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<xb:BAG-Extract-Deelbestand-LVC xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xs=""http://www.w3.org/2001/XMLSchema"" xmlns:xb=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901"" xmlns:bag_LVC=""http://www.kadaster.nl/schemas/imbag/lvc/v20090901"" xmlns:gml=""http://www.opengis.net/gml"" xmlns:xlink=""http://www.w3.org/1999/xlink"" xmlns:bagtype=""http://www.kadaster.nl/schemas/imbag/imbag-types/v20090901"" xmlns:nen5825=""http://www.kadaster.nl/schemas/imbag/nen5825/v20090901"" xmlns:product_LVC=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-producten-lvc/v20090901"" xmlns:selecties-extract=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-selecties/v20090901"" xsi:schemaLocation=""http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901 http://www.kadaster.nl/schemas/bag-verstrekkingen/extract-deelbestand-lvc/v20090901/BagvsExtractDeelbestandExtractLvc-1.4.xsd"">
+  <xb:antwoord>
+    <xb:vraag>
+      <selecties-extract:Gebied-Registratief>
+        <selecties-extract:Gebied-NLD>
+          <selecties-extract:GebiedIdentificatie>9999</selecties-extract:GebiedIdentificatie>
+          <selecties-extract:GebiedNaam>Nederland</selecties-extract:GebiedNaam>
+          <selecties-extract:gebiedTypeNederland>1</selecties-extract:gebiedTypeNederland>
+        </selecties-extract:Gebied-NLD>
+      </selecties-extract:Gebied-Registratief>
+      <selecties-extract:StandTechnischeDatum>20200808</selecties-extract:StandTechnischeDatum>
+    </xb:vraag>
+    <xb:producten>
+      <product_LVC:LVC-product>
+        <bag_LVC:Woonplaats>
+          <bag_LVC:identificatie>3086</bag_LVC:identificatie>
+          <bag_LVC:aanduidingRecordInactief>N</bag_LVC:aanduidingRecordInactief>
+          <bag_LVC:aanduidingRecordCorrectie>0</bag_LVC:aanduidingRecordCorrectie>
+          <bag_LVC:officieel>N</bag_LVC:officieel>
+          <bag_LVC:tijdvakgeldigheid>
+            <bagtype:begindatumTijdvakGeldigheid>2020022700000100</bagtype:begindatumTijdvakGeldigheid>
+          </bag_LVC:tijdvakgeldigheid>
+          <bag_LVC:inOnderzoek>N</bag_LVC:inOnderzoek>
+          <bag_LVC:bron>
+            <bagtype:documentdatum>20200227</bagtype:documentdatum>
+            <bagtype:documentnummer>Corsanr.20/1871</bagtype:documentnummer>
+          </bag_LVC:bron>
+          <bag_LVC:woonplaatsStatus>Woonplaats aangewezen</bag_LVC:woonplaatsStatus>
+        </bag_LVC:Woonplaats>
+      </product_LVC:LVC-product>
+    </xb:producten>
+  </xb:antwoord>
+</xb:BAG-Extract-Deelbestand-LVC>
+"));
+
+            // act
+            var woonplaats = BagParser.ParseWoonplaatsen(xmlReader);
+
+            // assert
+            woonplaats.Should().BeEmpty();
+        }
     }
 }

@@ -8,6 +8,8 @@ using System.Xml;
 using NodaTime;
 using NodaTime.Text;
 
+using Serilog;
+
 using Tiesmaster.ProjectZen.Domain.Bag;
 
 namespace Tiesmaster.ProjectZen.BagImporter
@@ -85,8 +87,23 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 $"/xb:BAG-Extract-Deelbestand-LVC/xb:antwoord/xb:producten/product_LVC:LVC-product/bag_LVC:{xmlNodeName}",
                 namespaceManager);
 
-            return from XmlNode node in nodes
-                   select parseBagObject(node, namespaceManager);
+            return nodes
+                .Cast<XmlNode>()
+                .Select(TryParseBagObject)
+                .Where(x => x != default);
+
+            TBagObject TryParseBagObject(XmlNode node)
+            {
+                try
+                {
+                    return parseBagObject(node, namespaceManager);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to parse {BagObjectName}, XML: {InnerXml}", xmlNodeName, node.InnerXml);
+                    return null;
+                }
+            }
         }
 
         private static XmlNamespaceManager GetNamespaceManager(XmlDocument xmlDocument)
