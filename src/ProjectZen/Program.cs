@@ -38,6 +38,8 @@ namespace Tiesmaster.ProjectZen
 
             //var buildings = buildingImporter.ReadBuildings();
             //PersistToRavenDB(nums);
+
+            Log.CloseAndFlush();
         }
 
         private static void ConfigureLogging()
