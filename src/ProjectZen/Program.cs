@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +10,8 @@ using Raven.Client.Documents;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
 
+using Serilog;
+
 using Tiesmaster.ProjectZen.BagImporter;
 
 namespace Tiesmaster.ProjectZen
@@ -19,6 +20,8 @@ namespace Tiesmaster.ProjectZen
     {
         public static void Main()
         {
+            ConfigureLogging();
+
             var maxFilesToProcess = 1;
             var buildingImporter = new BuildingBagImporter(
                 SystemClock.Instance,
@@ -31,9 +34,18 @@ namespace Tiesmaster.ProjectZen
             PersistToRavenDB(nums);
         }
 
+        private static void ConfigureLogging()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.ColoredConsole()
+                .WriteTo.Seq("http://localhost:5341")
+                .CreateLogger();
+        }
+
         private static void PersistToRavenDB(IEnumerable<object> objects)
         {
-            Console.WriteLine("Start persisting");
+            Log.Information("Start persisting");
             var totalSw = Stopwatch.StartNew();
 
             using var store = OpenDocumentStore();
@@ -41,7 +53,7 @@ namespace Tiesmaster.ProjectZen
             var bulkInsert = store.BulkInsert();
             foreach (var (objectBatch, index) in objects.Batch(10_000).WithIndex())
             {
-                Console.WriteLine($"Saving batch {index}");
+                Log.Information($"Saving batch {index}");
                 var batchSw = Stopwatch.StartNew();
 
                 foreach (var building in objectBatch)
@@ -49,10 +61,10 @@ namespace Tiesmaster.ProjectZen
                     bulkInsert.Store(building);
                 }
 
-                Console.WriteLine($"Saved batch {index} of 10.000 (in {batchSw.Elapsed})");
+                Log.Information($"Saved batch {index} of 10.000 (in {batchSw.Elapsed})");
             }
 
-            Console.WriteLine($"Finished persisting objects (in {totalSw.Elapsed})");
+            Log.Information($"Finished persisting objects (in {totalSw.Elapsed})");
         }
 
         private static DocumentStore OpenDocumentStore()
@@ -75,13 +87,13 @@ namespace Tiesmaster.ProjectZen
             var existingDatabases = documentStore.Maintenance.Server.Send(new GetDatabaseNamesOperation(0, 128));
             if (!existingDatabases.Any(name => name == databaseName))
             {
-                //_logger.LogInformation("RavenDB database '{DatabaseName}' is absent. Creating database...", databaseName);
+                Log.Information("RavenDB database {DatabaseName} is absent. Creating database...", databaseName);
                 documentStore.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord(databaseName)));
-                //_logger.LogInformation("RavenDB database '{DatabaseName}' created.", databaseName);
+                Log.Information("RavenDB database {DatabaseName} created.", databaseName);
             }
             else
             {
-                //_logger.LogDebug("RavenDB database '{DatabaseName}' already exists. Skipping creation.", databaseName);
+                Log.Debug("RavenDB database {DatabaseName} already exists. Skipping creation.", databaseName);
             }
         }
     }
