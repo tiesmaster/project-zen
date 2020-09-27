@@ -7,3 +7,10 @@ services:
     environment:
       RAVEN_License_Eula_Accepted: "true"
       RAVEN_Setup_Mode: None
+  seq:
+    image: datalust/seq
+    ports:
+      - "5341:5341"
+      - "15341:80"
+    environment:
+      ACCEPT_EULA: "Y"
