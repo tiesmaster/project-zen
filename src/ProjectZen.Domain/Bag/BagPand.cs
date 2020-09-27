@@ -1,5 +1,3 @@
-﻿using System.Collections.Immutable;
-
 namespace Tiesmaster.ProjectZen.Domain.Bag
 {
     public class BagPand : BagBase
