@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Tiesmaster.ProjectZen
         public static void Main()
         {
             ConfigureLogging();
+            AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
 
             var maxFilesToProcess = 1;
             var buildingImporter = new BuildingBagImporter(
@@ -43,6 +45,14 @@ namespace Tiesmaster.ProjectZen
                 .WriteTo.ColoredConsole()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
+        }
+
+        private static void LogUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var ex = (Exception)e.ExceptionObject;
+
+            Log.Fatal(ex, $"{ex.GetType()}: {ex.Message}");
+            Log.CloseAndFlush();
         }
 
         private static void PersistToRavenDB(IEnumerable<object> objects)
