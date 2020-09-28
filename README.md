@@ -34,3 +34,12 @@
 - https://www.google.com/search?client=firefox-b-d&q=miniprofiler+serilog
 - https://docs.docker.com/storage/volumes/
 - https://docs.docker.com/compose/compose-file/#volumes
+
+- https://stackoverflow.com/questions/15181358/how-can-i-unit-test-performance-optimisations-in-c
+- https://stackoverflow.com/questions/969290/exact-time-measurement-for-performance-testing/16157458#16157458
+- https://stackoverflow.com/questions/457605/how-to-measure-code-performance-in-net
+- https://github.com/dotnet/BenchmarkDotNet
+- https://benchmarkdotnet.org/articles/faq.html
+- https://benchmarkdotnet.org/articles/contributing/running-tests.html
+- https://github.com/dotnet/BenchmarkDotNet/issues/155
+- https://aakinshin.net/posts/jon-skeet-quiz/
