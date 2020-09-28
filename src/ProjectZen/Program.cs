@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 using MoreLinq;
 
@@ -47,10 +48,21 @@ namespace Tiesmaster.ProjectZen
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .Enrich.WithProperty("ApplicationName", "ProjectZen")
+                .Enrich.WithProperty("ApplicationVersion", GetAssemblyVersion())
                 .Enrich.FromLogContext()
                 .WriteTo.ColoredConsole()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
+        }
+
+        private static string GetAssemblyVersion()
+        {
+            var assemblyInformationalVersion = Assembly
+                .GetEntryAssembly()
+                .GetCustomAttributes<AssemblyInformationalVersionAttribute>()
+                .Single();
+
+            return assemblyInformationalVersion.InformationalVersion;
         }
 
         private static void LogUnhandledException(object sender, UnhandledExceptionEventArgs e)
