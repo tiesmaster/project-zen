@@ -54,7 +54,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
             var totalFilesToRead = bagObjectFiles.Count;
 
-            Log.Information("Start reading {BagObjectName} over {TotalFilesCount} files", bagObjectNamePlural, totalFilesToRead);
+            _logger.LogStartReadingBagObjects(bagObjectNamePlural, totalFilesToRead);
 
             var allBagObjects = new List<TBagObject>();
             var batchSw = Stopwatch.StartNew();
@@ -79,7 +79,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                     allBagObjects.Count);
             }
 
-            _logger.LogFinishReadingObjects(bagObjectNamePlural, allBagObjects.Count, totalFilesToRead, totalSw);
+            _logger.LogFinishReadingBagObjects(bagObjectNamePlural, allBagObjects.Count, totalFilesToRead, totalSw);
 
             return allBagObjects;
         }
@@ -139,7 +139,12 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
     public static class LoggerExtensions
     {
-        public static void LogFinishReadingObjects(
+        public static void LogStartReadingBagObjects(this ILogger logger, string bagObjectNamePlural, int totalFilesToRead)
+        {
+            logger.Information("Start reading {BagObjectName} over {TotalFilesCount} files", bagObjectNamePlural, totalFilesToRead);
+        }
+
+        public static void LogFinishReadingBagObjects(
             this ILogger logger,
             string bagObjectNamePlural,
             int totalCountRead,
