@@ -7,6 +7,7 @@ using System.Linq;
 using NodaTime;
 
 using Serilog;
+using Serilog.Context;
 
 using Tiesmaster.ProjectZen.Domain;
 using Tiesmaster.ProjectZen.Domain.Bag;
@@ -37,36 +38,51 @@ namespace Tiesmaster.ProjectZen.BagImporter
             string bagObjectNamePlural,
             Func<string, IEnumerable<TBagObject>> parseBagObjectsFile) where TBagObject : BagBase
         {
-            Log.Information("Start reading {BagObjectName}", bagObjectNamePlural);
+            using var _ = LogContext.PushProperty("BagObjectCode", bagObjectCode);
+
             var totalSw = Stopwatch.StartNew();
 
             var referenceInstant = _clock.GetCurrentInstant();
 
-            var bagObjectFiles = Directory.EnumerateFiles(_bagXmlFilesPath, $"9999{bagObjectCode}*.xml");
+            var bagObjectFiles = Directory
+                .EnumerateFiles(_bagXmlFilesPath, $"9999{bagObjectCode}*.xml")
+                .Take(_maxFilesToProcess)
+                .ToList();
 
-            bagObjectFiles = bagObjectFiles.Take(_maxFilesToProcess);
+            var totalFilesToRead = bagObjectFiles.Count;
+
+            Log.Information("Start reading {BagObjectName} over {TotalFilesCount} files", bagObjectNamePlural, totalFilesToRead);
 
             var allBagObjects = new List<TBagObject>();
             var batchSw = Stopwatch.StartNew();
             foreach (var (bagObjectFile, index) in bagObjectFiles.WithIndex())
             {
-                Log.Debug("Processing {BagObjectFileName}", Path.GetFileName(bagObjectFile));
+                var indexOneBased = index + 1;
+
+                Log
+                    .ForContext("BagObjectFileName", Path.GetFileName(bagObjectFile))
+                    .Debug("Processing file {CurrentFileIndex} / {TotalFilesCount}", indexOneBased, totalFilesToRead);
+
                 var singleFileSw = Stopwatch.StartNew();
 
                 allBagObjects.AddRange(from bagObject in parseBagObjectsFile(bagObjectFile)
                                        where bagObject.IsActive(referenceInstant)
                                        select bagObject);
 
-                var totalFilesProcessed = index + 1;
                 Log.Debug(
-                    "Processed in: {SingleFileElapsed} (Average: {AverageElapsedPerFile}) | Total {BagObjectName}: {TotalBagObjectsRead}",
-                    singleFileSw.Elapsed,
-                    batchSw.Elapsed / totalFilesProcessed,
-                    bagObjectNamePlural,
+                    "Processed in: {MsPerFile} ms (Average: {MsPerFileAverage} ms) | Total: {BatchCountRead:N0}",
+                    singleFileSw.ElapsedMilliseconds,
+                    batchSw.ElapsedMilliseconds / indexOneBased,
                     allBagObjects.Count);
             }
 
-            Log.Information("Finished reading {BagObjectName} (in {TotalElapsed})", bagObjectNamePlural, totalSw.Elapsed);
+            Log.Information(
+                "Finished reading {BagObjectName} ({TotalCountRead:N0} objects across {TotalFilesRead:N0} files in {TotalElapsed} | {MsPerFile} ms / file)",
+                bagObjectNamePlural,
+                allBagObjects.Count,
+                totalFilesToRead,
+                totalSw.Elapsed,
+                totalSw.ElapsedMilliseconds / totalFilesToRead);
 
             return allBagObjects;
         }

@@ -25,7 +25,7 @@ namespace Tiesmaster.ProjectZen
             ConfigureLogging();
             AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
 
-            var maxFilesToProcess = 1;
+            var maxFilesToProcess = 10;
             var buildingImporter = new BuildingBagImporter(
                 SystemClock.Instance,
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
