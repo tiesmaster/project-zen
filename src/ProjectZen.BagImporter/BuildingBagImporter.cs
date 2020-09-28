@@ -19,12 +19,15 @@ namespace Tiesmaster.ProjectZen.BagImporter
         private readonly IClock _clock;
         private readonly string _bagXmlFilesPath;
         private readonly int _maxFilesToProcess;
+        private readonly ILogger _logger;
 
         public BuildingBagImporter(IClock clock, string bagXmlFilesPath, int maxFilesToProcess = int.MaxValue)
         {
             _clock = clock;
             _bagXmlFilesPath = bagXmlFilesPath;
             _maxFilesToProcess = maxFilesToProcess;
+
+            _logger = Log.Logger;
         }
 
         public IEnumerable<BagPand> ReadPanden() => ReadBagObjecten("PND", "Panden", BagParser.ParsePanden);
@@ -76,13 +79,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                     allBagObjects.Count);
             }
 
-            Log.Information(
-                "Finished reading {BagObjectName} ({TotalCountRead:N0} objects across {TotalFilesRead:N0} files in {TotalElapsed} | {MsPerFile} ms / file)",
-                bagObjectNamePlural,
-                allBagObjects.Count,
-                totalFilesToRead,
-                totalSw.Elapsed,
-                totalSw.ElapsedMilliseconds / totalFilesToRead);
+            _logger.LogFinishReadingObjects(bagObjectNamePlural, allBagObjects.Count, totalFilesToRead, totalSw);
 
             return allBagObjects;
         }
@@ -137,6 +134,26 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 pand.Id,
                 pand.ConstructionYear,
                 address);
+        }
+    }
+
+    public static class LoggerExtensions
+    {
+        public static void LogFinishReadingObjects(
+            this ILogger logger,
+            string bagObjectNamePlural,
+            int totalCountRead,
+            int totalFilesToRead,
+            Stopwatch totalElapsed)
+        {
+            logger.Information(
+                "Finished reading {BagObjectName} ({TotalCountRead:N0} objects across {TotalFilesRead:N0} files " +
+                "in {TotalElapsed} | {MsPerFile} ms / file)",
+                bagObjectNamePlural,
+                totalCountRead,
+                totalFilesToRead,
+                totalElapsed.Elapsed,
+                totalElapsed.ElapsedMilliseconds / totalFilesToRead);
         }
     }
 }
