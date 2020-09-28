@@ -43,8 +43,6 @@ namespace Tiesmaster.ProjectZen.BagImporter
         {
             using var _ = LogContext.PushProperty("BagObjectCode", bagObjectCode);
 
-            var totalSw = Stopwatch.StartNew();
-
             var referenceInstant = _clock.GetCurrentInstant();
 
             var bagObjectFiles = Directory
@@ -54,32 +52,23 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
             var totalFilesToRead = bagObjectFiles.Count;
 
-            _logger.LogStartReadingBagObjects(bagObjectNamePlural, totalFilesToRead);
+            var totalSw = Stopwatch.StartNew();
+            _logger.StartReadingBagObjects(bagObjectNamePlural, totalFilesToRead);
 
             var allBagObjects = new List<TBagObject>();
-            var batchSw = Stopwatch.StartNew();
-            foreach (var (bagObjectFile, index) in bagObjectFiles.WithIndex())
+            foreach (var (bagObjectFile, fileIndex) in bagObjectFiles.WithIndex())
             {
-                var indexOneBased = index + 1;
-
-                Log
-                    .ForContext("BagObjectFileName", Path.GetFileName(bagObjectFile))
-                    .Debug("Processing file {CurrentFileIndex} / {TotalFilesCount}", indexOneBased, totalFilesToRead);
-
                 var singleFileSw = Stopwatch.StartNew();
+                _logger.StartReadingBagFile(Path.GetFileName(bagObjectFile), fileIndex, totalFilesToRead);
 
                 allBagObjects.AddRange(from bagObject in parseBagObjectsFile(bagObjectFile)
                                        where bagObject.IsActive(referenceInstant)
                                        select bagObject);
 
-                Log.Debug(
-                    "Processed in: {MsPerFile} ms (Average: {MsPerFileAverage} ms) | Total: {BatchCountRead:N0}",
-                    singleFileSw.ElapsedMilliseconds,
-                    batchSw.ElapsedMilliseconds / indexOneBased,
-                    allBagObjects.Count);
+                _logger.FinishedReadingBagFile(singleFileSw, totalSw, fileIndex + 1, allBagObjects.Count);
             }
 
-            _logger.LogFinishReadingBagObjects(bagObjectNamePlural, allBagObjects.Count, totalFilesToRead, totalSw);
+            _logger.FinishReadingBagObjects(bagObjectNamePlural, allBagObjects.Count, totalFilesToRead, totalSw);
 
             return allBagObjects;
         }
@@ -139,16 +128,37 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
     public static class LoggerExtensions
     {
-        public static void LogStartReadingBagObjects(this ILogger logger, string bagObjectNamePlural, int totalFilesToRead)
+        public static void StartReadingBagFile(this ILogger logger, string fileName, int fileIndex, int totalFilesToRead)
+        {
+            logger
+                .ForContext("BagObjectFileName", fileName)
+                .Debug("Processing file {CurrentFileIndex} / {TotalFilesCount}", fileIndex + 1, totalFilesToRead);
+        }
+
+        public static void FinishedReadingBagFile(
+            this ILogger logger,
+            Stopwatch singleFileElapsed,
+            Stopwatch totalElapsed,
+            int totalFilesRead,
+            int totalCountRead)
+        {
+            logger.Debug(
+                "Processed in: {MsPerFile} ms (Average: {MsPerFileAverage} ms) | Total: {TotalCountRead:N0}",
+                singleFileElapsed.ElapsedMilliseconds,
+                totalElapsed.ElapsedMilliseconds / totalFilesRead,
+                totalCountRead);
+        }
+
+        public static void StartReadingBagObjects(this ILogger logger, string bagObjectNamePlural, int totalFilesToRead)
         {
             logger.Information("Start reading {BagObjectName} over {TotalFilesCount} files", bagObjectNamePlural, totalFilesToRead);
         }
 
-        public static void LogFinishReadingBagObjects(
+        public static void FinishReadingBagObjects(
             this ILogger logger,
             string bagObjectNamePlural,
             int totalCountRead,
-            int totalFilesToRead,
+            int totalFilesRead,
             Stopwatch totalElapsed)
         {
             logger.Information(
@@ -156,9 +166,9 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 "in {TotalElapsed} | {MsPerFile} ms / file)",
                 bagObjectNamePlural,
                 totalCountRead,
-                totalFilesToRead,
+                totalFilesRead,
                 totalElapsed.Elapsed,
-                totalElapsed.ElapsedMilliseconds / totalFilesToRead);
+                totalElapsed.ElapsedMilliseconds / totalFilesRead);
         }
     }
 }
