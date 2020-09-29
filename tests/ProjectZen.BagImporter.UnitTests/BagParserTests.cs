@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Xml;
 
 using FluentAssertions;
+using FluentAssertions.Extensions;
 
 using NodaTime;
 
@@ -630,6 +632,24 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 
             // assert
             woonplaats.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void MyTestMethod()
+        {
+            //Func<IEnumerable<BagNummeraanduiding>> act = () =>
+            //    BagParser.ParseNummeraanduidingen(@"C:\src\projects\project-zen\tmp\small-zips-unpacked\9999NUM08082020-000001.xml");
+
+            Action act = () =>
+                BagParser.ParseNummeraanduidingen(@"C:\src\projects\project-zen\tmp\small-zips-unpacked\9999NUM08082020-000001.xml");
+
+
+            act.ExecutionTime().Should().BeLessOrEqualTo(100.Milliseconds());
+
+            //act.ExecutionTimeOf(() =>
+            //    BagParser.ParseNummeraanduidingen(@"C:\src\projects\project-zen\tmp\small-zips-unpacked\9999NUM08082020-000001.xml")).Should()
+
+            //nummeraanduidingen.Should().HaveCount(10_000);
         }
     }
 }
