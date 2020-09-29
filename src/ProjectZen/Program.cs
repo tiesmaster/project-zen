@@ -25,20 +25,20 @@ namespace Tiesmaster.ProjectZen
             ConfigureLogging();
             AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
 
-            var maxFilesToProcess = 10;
+            var maxFilesToProcess = 100;
             var buildingImporter = new BuildingBagImporter(
                 SystemClock.Instance,
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            buildingImporter.ReadWoonplaatsen();
-            buildingImporter.ReadOpenbareRuimten();
-            buildingImporter.ReadNummeraanduidingen();
-            buildingImporter.ReadVerblijfsobjecten();
-            buildingImporter.ReadPanden();
+            //buildingImporter.ReadWoonplaatsen();
+            //buildingImporter.ReadOpenbareRuimten();
+            //buildingImporter.ReadNummeraanduidingen();
+            var vbos = buildingImporter.ReadVerblijfsobjecten();
+            //buildingImporter.ReadPanden();
 
             //var buildings = buildingImporter.ReadBuildings();
-            //PersistToRavenDB(nums);
+            PersistToRavenDB(vbos);
 
             Log.CloseAndFlush();
         }
