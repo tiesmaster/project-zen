@@ -25,6 +25,9 @@ namespace Tiesmaster.ProjectZen
             ConfigureLogging();
             AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
 
+            var totalSw = Stopwatch.StartNew();
+            Log.Logger.StartImport();
+
             var maxFilesToProcess = 100;
             var buildingImporter = new BuildingBagImporter(
                 SystemClock.Instance,
@@ -40,6 +43,7 @@ namespace Tiesmaster.ProjectZen
             //var buildings = buildingImporter.ReadBuildings();
             PersistToRavenDB(vbos);
 
+            Log.Logger.FinishedImport(totalSw);
             Log.CloseAndFlush();
         }
 
