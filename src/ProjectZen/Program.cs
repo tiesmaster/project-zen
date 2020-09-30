@@ -29,42 +29,42 @@ namespace Tiesmaster.ProjectZen
             var totalSw = Stopwatch.StartNew();
             Log.Logger.StartImport();
 
-            var maxFilesToProcess = 10;
+            var maxFilesToProcess = 100;
             var buildingImporter = new BuildingBagImporter(
                 SystemClock.Instance,
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            var tasks = new[]
+            //var tasks = new[]
+            //{
+            await Task.Run(() =>
             {
-                Task.Run(() =>
-                {
-                    var bagObjects = buildingImporter.ReadWoonplaatsen();
-                    PersistToRavenDB(bagObjects);
-                }),
-                Task.Run(() =>
-                {
-                    var bagObjects = buildingImporter.ReadOpenbareRuimten();
-                    PersistToRavenDB(bagObjects);
-                }),
-                Task.Run(() =>
-                {
-                    var bagObjects = buildingImporter.ReadNummeraanduidingen();
-                    PersistToRavenDB(bagObjects);
-                }),
-                Task.Run(() =>
-                {
-                    var bagObjects = buildingImporter.ReadVerblijfsobjecten();
-                    PersistToRavenDB(bagObjects);
-                }),
-                Task.Run(() =>
-                {
-                    var bagObjects = buildingImporter.ReadPanden();
-                    PersistToRavenDB(bagObjects);
-                }),
-            };
+                var bagObjects = buildingImporter.ReadWoonplaatsen();
+                PersistToRavenDB(bagObjects);
+            });
+            await Task.Run(() =>
+            {
+                var bagObjects = buildingImporter.ReadOpenbareRuimten();
+                PersistToRavenDB(bagObjects);
+            });
+            await Task.Run(() =>
+            {
+                var bagObjects = buildingImporter.ReadNummeraanduidingen();
+                PersistToRavenDB(bagObjects);
+            });
+            await Task.Run(() =>
+            {
+                var bagObjects = buildingImporter.ReadVerblijfsobjecten();
+                PersistToRavenDB(bagObjects);
+            });
+            await Task.Run(() =>
+            {
+                var bagObjects = buildingImporter.ReadPanden();
+                PersistToRavenDB(bagObjects);
+            });
+            //};
 
-            await Task.WhenAll(tasks);
+            //await Task.WhenAll(tasks);
 
             Log.Logger.FinishedImport(totalSw);
             Log.CloseAndFlush();
