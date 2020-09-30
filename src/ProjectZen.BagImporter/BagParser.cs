@@ -35,10 +35,84 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
         public static IEnumerable<BagPand> ParsePanden(XmlReader xmlReader)
         {
-            return ParseBagObject(
-                xmlReader,
-                "Pand",
-                (node, _) => ParsePand(node));
+            xmlReader.ReadToDescendant("product_LVC:LVC-product");
+
+            var productDepth = xmlReader.Depth;
+            xmlReader.Read();
+
+            while (xmlReader.Depth > productDepth)
+            {
+                yield return ParsePand(xmlReader);
+                xmlReader.Read();
+            }
+
+            //xmlReader.MoveToElement();
+
+            //return ParseBagObject(
+            //    xmlReader,
+            //    "Pand",
+            //    (node, _) => ParsePand(node));
+        }
+
+        private static BagPand ParsePand(XmlReader xmlReader)
+        {
+            string id = default;
+
+            // bag version
+            var active = true;
+            var correctionIndex = 0;
+            var startInstant = Instant.MinValue;
+            var endInstant = Instant.MaxValue;
+
+            // other attributes
+            var constructionYear = 0;
+
+            var pandDepth = xmlReader.Depth;
+            xmlReader.Read();
+
+            while (xmlReader.Depth > pandDepth)
+            {
+                switch (xmlReader.Name)
+                {
+                    case "bag_LVC:identificatie":
+                        id = xmlReader.ReadElementContentAsString();
+                        break;
+
+                    // BAG version
+                    case "bag_LVC:aanduidingRecordInactief":
+                        active = xmlReader.ReadElementContentAsString() == "N";
+                        break;
+
+                    case "bag_LVC:aanduidingRecordCorrectie":
+                        correctionIndex = xmlReader.ReadElementContentAsInt();
+                        break;
+
+                    case "bagtype:begindatumTijdvakGeldigheid":
+                        startInstant = _bagInstantPattern.Parse(xmlReader.ReadElementContentAsString()).Value;
+                        break;
+
+                    case "bagtype:einddatumTijdvakGeldigheid":
+                        endInstant = _bagInstantPattern.Parse(xmlReader.ReadElementContentAsString()).Value;
+                        break;
+
+                    // other attributes
+                    case "bag_LVC:bouwjaar":
+                        constructionYear = xmlReader.ReadElementContentAsInt();
+                        break;
+
+                    default:
+                        xmlReader.Read();
+                        break;
+                }
+            }
+
+            return new BagPand(
+                id,
+                new BagVersion(
+                    active,
+                    correctionIndex,
+                    new Interval(startInstant, endInstant)),
+                constructionYear);
         }
 
         public static IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(XmlReader xmlReader)

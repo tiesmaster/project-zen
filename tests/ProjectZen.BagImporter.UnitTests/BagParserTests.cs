@@ -64,7 +64,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
     </xb:producten>
   </xb:antwoord>
 </xb:BAG-Extract-Deelbestand-LVC>
-"));
+"), new XmlReaderSettings { IgnoreWhitespace = true });
 
             var startInstant = Instant.FromUtc(2015, 10, 09, 00, 00);
             var expectedPand = new BagPand(
@@ -76,7 +76,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                 constructionYear: 1942);
 
             // act
-            var panden = BagParser.ParsePanden(xmlReader);
+            var panden = BagParser.ParsePanden(xmlReader).ToList();
 
             // assert
             panden.Should().ContainSingle();
@@ -146,7 +146,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
                 constructionYear: 1942);
 
             // act
-            var panden = BagParser.ParsePanden(xmlReader);
+            var panden = BagParser.ParsePanden(xmlReader).ToList();
 
             // assert
             panden.Should().ContainSingle();

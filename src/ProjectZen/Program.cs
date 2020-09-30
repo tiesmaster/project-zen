@@ -37,11 +37,11 @@ namespace Tiesmaster.ProjectZen
             //buildingImporter.ReadWoonplaatsen();
             //buildingImporter.ReadOpenbareRuimten();
             //buildingImporter.ReadNummeraanduidingen();
-            var vbos = buildingImporter.ReadVerblijfsobjecten();
-            //buildingImporter.ReadPanden();
+            //var vbos = buildingImporter.ReadVerblijfsobjecten();
+            buildingImporter.ReadPanden();
 
             //var buildings = buildingImporter.ReadBuildings();
-            PersistToRavenDB(vbos);
+            //PersistToRavenDB(vbos);
 
             Log.Logger.FinishedImport(totalSw);
             Log.CloseAndFlush();
