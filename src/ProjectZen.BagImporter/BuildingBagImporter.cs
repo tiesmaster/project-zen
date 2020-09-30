@@ -61,16 +61,19 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 var singleFileSw = Stopwatch.StartNew();
                 _logger.StartReadingBagFile(Path.GetFileName(bagObjectFile), fileIndex, totalFilesToRead);
 
-                allBagObjects.AddRange(from bagObject in parseBagObjectsFile(bagObjectFile)
+                var bagObjectsInFile = from bagObject in parseBagObjectsFile(bagObjectFile)
                                        where bagObject.IsActive(referenceInstant)
-                                       select bagObject);
+                                       select bagObject;
+
+                foreach (var bagObject in bagObjectsInFile)
+                {
+                    yield return bagObject;
+                }
 
                 _logger.FinishedReadingBagFile(singleFileSw, totalSw, fileIndex + 1, allBagObjects.Count);
             }
 
             _logger.FinishReadingBagObjects(bagObjectNamePlural, allBagObjects.Count, totalFilesToRead, totalSw);
-
-            return allBagObjects;
         }
 
         // draft code
