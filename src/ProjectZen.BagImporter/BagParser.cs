@@ -123,7 +123,8 @@ namespace Tiesmaster.ProjectZen.BagImporter
             return new BagPand(
                 id: ParseId(node),
                 version: ParseBagVersion(node),
-                constructionYear: ParseConstructionYear(node));
+                constructionYear: ParseConstructionYear(node),
+                geometry: ParseGeometry(node));
         }
 
         private static BagVerblijfsobject ParseVerblijfsobject(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -286,6 +287,11 @@ namespace Tiesmaster.ProjectZen.BagImporter
             }
 
             return _bagInstantPattern.Parse(element.InnerText).Value;
+        }
+
+        private static string ParseGeometry(XmlNode node)
+        {
+            return node["bag_LVC:pandGeometrie"].InnerText;
         }
     }
 }
