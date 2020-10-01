@@ -30,7 +30,42 @@ namespace Tiesmaster.ProjectZen.BagImporter
             _logger = Log.Logger;
         }
 
-        public IEnumerable<BagPand> ReadPanden() => ReadBagObjecten("PND", "Panden", BagParser.ParsePanden);
+        public IEnumerable<BagPand> ReadPanden()
+        {
+            var bagObjectCode = "PND";
+            var bagObjectNamePlural = "Panden";
+            using var _ = LogContext.PushProperty("BagObjectCode", bagObjectCode);
+
+            var referenceInstant = _clock.GetCurrentInstant();
+
+            var bagObjectFiles = Directory
+                .EnumerateFiles(_bagXmlFilesPath, $"9999{bagObjectCode}*.xml")
+                .Take(_maxFilesToProcess)
+                .ToList();
+
+            var totalFilesToRead = bagObjectFiles.Count;
+
+            var totalSw = Stopwatch.StartNew();
+            _logger.StartReadingBagObjects(bagObjectNamePlural, totalFilesToRead);
+
+            var allBagObjects = new List<BagPand>(37_000_000);
+            foreach (var (bagObjectFile, fileIndex) in bagObjectFiles.WithIndex())
+            {
+                var singleFileSw = Stopwatch.StartNew();
+                _logger.StartReadingBagFile(Path.GetFileName(bagObjectFile), fileIndex, totalFilesToRead);
+
+                allBagObjects.AddRange(from bagObject in BagParser.ParsePanden(bagObjectFile)
+                                       where bagObject.IsActive(referenceInstant)
+                                       select bagObject);
+
+                _logger.FinishedReadingBagFile(singleFileSw, totalSw, fileIndex + 1, allBagObjects.Count);
+            }
+
+            _logger.FinishReadingBagObjects(bagObjectNamePlural, allBagObjects.Count, totalFilesToRead, totalSw);
+
+            return allBagObjects;
+        }
+
         public IEnumerable<BagVerblijfsobject> ReadVerblijfsobjecten() => ReadBagObjecten("VBO", "Verblijfsobjecten", BagParser.ParseVerblijfsobjecten);
         public IEnumerable<BagNummeraanduiding> ReadNummeraanduidingen() => ReadBagObjecten("NUM", "Nummeraanduidingen", BagParser.ParseNummeraanduidingen);
         public IEnumerable<BagOpenbareRuimte> ReadOpenbareRuimten() => ReadBagObjecten("OPR", "OpenbareRuimten", BagParser.ParseOpenbareRuimten);
