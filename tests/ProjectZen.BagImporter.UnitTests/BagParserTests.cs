@@ -651,7 +651,7 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
 </xb:BAG-Extract-Deelbestand-LVC>
 "));
 
-            var sut = CreateSut();
+            var sut = new BagParser(ignoreInvalidBagObjects: true);
 
             // act
             var woonplaats = sut.ParseWoonplaatsen(xmlReader);
@@ -660,6 +660,6 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             woonplaats.Should().BeEmpty();
         }
 
-        private static BagParser CreateSut() => new BagParser();
+        private static BagParser CreateSut() => new BagParser(ignoreInvalidBagObjects: false);
     }
 }

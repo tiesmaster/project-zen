@@ -19,6 +19,12 @@ namespace Tiesmaster.ProjectZen.BagImporter
     public class BagParser
     {
         private readonly InstantPattern _bagInstantPattern = InstantPattern.Create("yyyyMMddHHmmssff", CultureInfo.InvariantCulture);
+        private readonly bool _ignoreInvalidBagObjects;
+
+        public BagParser(bool ignoreInvalidBagObjects = true)
+        {
+            _ignoreInvalidBagObjects = ignoreInvalidBagObjects;
+        }
 
         public IEnumerable<BagPand> ParsePanden(string filename)
             => ParsePanden(XmlReader.Create(filename));
@@ -100,7 +106,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 {
                     return parseBagObject(node, namespaceManager);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (_ignoreInvalidBagObjects)
                 {
                     Log.Warning(ex, "Failed to parse {BagObjectName}, XML: {InnerXml}", xmlNodeName, node.InnerXml);
                     return null;
