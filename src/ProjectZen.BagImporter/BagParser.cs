@@ -103,7 +103,6 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 catch (Exception ex)
                 {
                     Log.Warning(ex, "Failed to parse {BagObjectName}, XML: {InnerXml}", xmlNodeName, node.InnerXml);
-                    throw;
                     return null;
                 }
             }
