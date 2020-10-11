@@ -20,6 +20,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
     {
         private readonly InstantPattern _bagInstantPattern = InstantPattern.Create("yyyyMMddHHmmssff", CultureInfo.InvariantCulture);
         private readonly bool _ignoreInvalidBagObjects;
+        private readonly GmlFormatter _gmlFormatter = GmlFormatter.Create();
 
         public BagParser(bool ignoreInvalidBagObjects = true)
         {
@@ -299,15 +300,13 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
         private GeometryPolygon ParseGeometry(XmlNode node)
         {
-            var gmlFormatter = GmlFormatter.Create();
-
             var gmlNode = node["bag_LVC:pandGeometrie"].FirstChild;
 
             OverrideSrsNameAttribute(gmlNode);
 
             var reader = new XmlNodeReader(gmlNode);
 
-            return gmlFormatter.Read<GeometryPolygon>(reader);
+            return _gmlFormatter.Read<GeometryPolygon>(reader);
         }
 
         private static void OverrideSrsNameAttribute(XmlNode gmlNode)
