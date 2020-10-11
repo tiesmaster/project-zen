@@ -302,9 +302,20 @@ namespace Tiesmaster.ProjectZen.BagImporter
             var gmlFormatter = GmlFormatter.Create();
 
             var gmlNode = node["bag_LVC:pandGeometrie"].FirstChild;
+
+            OverrideSrsNameAttribute(gmlNode);
+
             var reader = new XmlNodeReader(gmlNode);
 
             return gmlFormatter.Read<GeometryPolygon>(reader);
+        }
+
+        private static void OverrideSrsNameAttribute(XmlNode gmlNode)
+        {
+            // This is needed since the Microsoft.Spatial library doesn't support the srsName value
+            // to be supplied in URN form (like this: "urn:ogc:def:crs:EPSG::28992").
+
+            gmlNode.Attributes["srsName"].Value = "http://www.opengis.net/def/crs/EPSG/0/28992";
         }
     }
 }
