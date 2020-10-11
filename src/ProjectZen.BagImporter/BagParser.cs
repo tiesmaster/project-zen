@@ -16,26 +16,26 @@ using Tiesmaster.ProjectZen.Domain.Bag;
 
 namespace Tiesmaster.ProjectZen.BagImporter
 {
-    public static class BagParser
+    public class BagParser
     {
-        private static readonly InstantPattern _bagInstantPattern = InstantPattern.Create("yyyyMMddHHmmssff", CultureInfo.InvariantCulture);
+        private readonly InstantPattern _bagInstantPattern = InstantPattern.Create("yyyyMMddHHmmssff", CultureInfo.InvariantCulture);
 
-        public static IEnumerable<BagPand> ParsePanden(string filename)
+        public IEnumerable<BagPand> ParsePanden(string filename)
             => ParsePanden(XmlReader.Create(filename));
 
-        public static IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(string filename)
+        public IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(string filename)
             => ParseVerblijfsobjecten(XmlReader.Create(filename));
 
-        public static IEnumerable<BagNummeraanduiding> ParseNummeraanduidingen(string filename)
+        public IEnumerable<BagNummeraanduiding> ParseNummeraanduidingen(string filename)
             => ParseNummeraanduidingen(XmlReader.Create(filename));
 
-        public static IEnumerable<BagOpenbareRuimte> ParseOpenbareRuimten(string filename)
+        public IEnumerable<BagOpenbareRuimte> ParseOpenbareRuimten(string filename)
             => ParseOpenbareRuimten(XmlReader.Create(filename));
 
-        public static IEnumerable<BagWoonplaats> ParseWoonplaatsen(string filename)
+        public IEnumerable<BagWoonplaats> ParseWoonplaatsen(string filename)
             => ParseWoonplaatsen(XmlReader.Create(filename));
 
-        public static IEnumerable<BagPand> ParsePanden(XmlReader xmlReader)
+        public IEnumerable<BagPand> ParsePanden(XmlReader xmlReader)
         {
             return ParseBagObject(
                 xmlReader,
@@ -43,7 +43,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 (node, _) => ParsePand(node));
         }
 
-        public static IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(XmlReader xmlReader)
+        public IEnumerable<BagVerblijfsobject> ParseVerblijfsobjecten(XmlReader xmlReader)
         {
             return ParseBagObject(
                 xmlReader,
@@ -51,7 +51,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 ParseVerblijfsobject);
         }
 
-        public static IEnumerable<BagNummeraanduiding> ParseNummeraanduidingen(XmlReader xmlReader)
+        public IEnumerable<BagNummeraanduiding> ParseNummeraanduidingen(XmlReader xmlReader)
         {
             return ParseBagObject(
                 xmlReader,
@@ -59,7 +59,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 (node, _) => ParseNummeraanduiding(node));
         }
 
-        public static IEnumerable<BagOpenbareRuimte> ParseOpenbareRuimten(XmlReader xmlReader)
+        public IEnumerable<BagOpenbareRuimte> ParseOpenbareRuimten(XmlReader xmlReader)
         {
             return ParseBagObject(
                 xmlReader,
@@ -67,7 +67,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 (node, _) => ParseOpenbareRuimte(node));
         }
 
-        public static IEnumerable<BagWoonplaats> ParseWoonplaatsen(XmlReader xmlReader)
+        public IEnumerable<BagWoonplaats> ParseWoonplaatsen(XmlReader xmlReader)
         {
             return ParseBagObject(
                 xmlReader,
@@ -75,7 +75,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 (node, _) => ParseWoonplaats(node));
         }
 
-        private static IEnumerable<TBagObject> ParseBagObject<TBagObject>(
+        private IEnumerable<TBagObject> ParseBagObject<TBagObject>(
             XmlReader xmlReader,
             string xmlNodeName,
             Func<XmlNode, XmlNamespaceManager, TBagObject> parseBagObject) where TBagObject : BagBase
@@ -108,7 +108,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             }
         }
 
-        private static XmlNamespaceManager GetNamespaceManager(XmlDocument xmlDocument)
+        private XmlNamespaceManager GetNamespaceManager(XmlDocument xmlDocument)
         {
             var namespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
 
@@ -120,7 +120,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             return namespaceManager;
         }
 
-        private static BagPand ParsePand(XmlNode node)
+        private BagPand ParsePand(XmlNode node)
         {
             return new BagPand(
                 id: ParseId(node),
@@ -129,7 +129,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 geometry: ParseGeometry(node));
         }
 
-        private static BagVerblijfsobject ParseVerblijfsobject(XmlNode node, XmlNamespaceManager namespaceManager)
+        private BagVerblijfsobject ParseVerblijfsobject(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             return new BagVerblijfsobject(
                 id: ParseId(node),
@@ -139,7 +139,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 relatedPanden: ParseRelatedPanden(node, namespaceManager).ToImmutableList());
         }
 
-        private static BagNummeraanduiding ParseNummeraanduiding(XmlNode node)
+        private BagNummeraanduiding ParseNummeraanduiding(XmlNode node)
         {
             return new BagNummeraanduiding(
                 id: ParseId(node),
@@ -151,7 +151,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 relatedOpenbareRuimte: ParseRelatedOpenbareRuimte(node));
         }
 
-        private static BagOpenbareRuimte ParseOpenbareRuimte(XmlNode node)
+        private BagOpenbareRuimte ParseOpenbareRuimte(XmlNode node)
         {
             return new BagOpenbareRuimte(
                 id: ParseId(node),
@@ -160,7 +160,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 relatedWoonplaats: ParseRelatedWoonplaats(node));
         }
 
-        private static BagWoonplaats ParseWoonplaats(XmlNode node)
+        private BagWoonplaats ParseWoonplaats(XmlNode node)
         {
             return new BagWoonplaats(
                 id: ParseId(node),
@@ -168,62 +168,62 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 name: ParseWoonplaatsName(node));
         }
 
-        private static string ParseId(XmlNode node)
+        private string ParseId(XmlNode node)
         {
             return node["bag_LVC:identificatie"].InnerText;
         }
 
-        private static string ParseOpenbareRuimteName(XmlNode node)
+        private string ParseOpenbareRuimteName(XmlNode node)
         {
             return node["bag_LVC:openbareRuimteNaam"].InnerText;
         }
 
-        private static int ParseHouseNumber(XmlNode node)
+        private int ParseHouseNumber(XmlNode node)
         {
             return ParseInt(node["bag_LVC:huisnummer"]);
         }
 
-        private static char? ParseHouseLetter(XmlNode node)
+        private char? ParseHouseLetter(XmlNode node)
         {
             return node["bag_LVC:huisletter"]?.InnerText?.Single();
         }
 
-        private static string ParseHouseNumberAddition(XmlNode node)
+        private string ParseHouseNumberAddition(XmlNode node)
         {
             return node["bag_LVC:huisnummertoevoeging"]?.InnerText;
         }
 
-        private static string ParsePostalCode(XmlNode node)
+        private string ParsePostalCode(XmlNode node)
         {
             return node["bag_LVC:postcode"]?.InnerText;
         }
 
-        private static string ParseRelatedOpenbareRuimte(XmlNode node)
+        private string ParseRelatedOpenbareRuimte(XmlNode node)
         {
             return node["bag_LVC:gerelateerdeOpenbareRuimte"].InnerText;
         }
 
-        private static string ParseWoonplaatsName(XmlNode node)
+        private string ParseWoonplaatsName(XmlNode node)
         {
             return node["bag_LVC:woonplaatsNaam"].InnerText;
         }
 
-        private static int ParseConstructionYear(XmlNode node)
+        private int ParseConstructionYear(XmlNode node)
         {
             return ParseInt(node["bag_LVC:bouwjaar"]);
         }
 
-        private static string ParseRelatedWoonplaats(XmlNode node)
+        private string ParseRelatedWoonplaats(XmlNode node)
         {
             return node["bag_LVC:gerelateerdeWoonplaats"].InnerText;
         }
 
-        private static string ParseRelatedMainAddress(XmlNode node)
+        private string ParseRelatedMainAddress(XmlNode node)
         {
             return node["bag_LVC:gerelateerdeAdressen"]["bag_LVC:hoofdadres"].InnerText;
         }
 
-        private static IEnumerable<string> ParseRelatedAdditionalAddresses(XmlNode node, XmlNamespaceManager namespaceManager)
+        private IEnumerable<string> ParseRelatedAdditionalAddresses(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             var relatedAddresses = node["bag_LVC:gerelateerdeAdressen"];
 
@@ -234,7 +234,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             }
         }
 
-        private static IEnumerable<string> ParseRelatedPanden(XmlNode node, XmlNamespaceManager namespaceManager)
+        private IEnumerable<string> ParseRelatedPanden(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             var relatedPanden = node.SelectNodes("bag_LVC:gerelateerdPand", namespaceManager);
             foreach (XmlNode relatedPand in relatedPanden)
@@ -243,7 +243,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             }
         }
 
-        private static BagVersion ParseBagVersion(XmlNode node)
+        private BagVersion ParseBagVersion(XmlNode node)
         {
             return new BagVersion(
                 active: ParseBagActive(node),
@@ -251,17 +251,17 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 validityInterval: ParseValidityInterval(node));
         }
 
-        private static bool ParseBagActive(XmlNode node)
+        private bool ParseBagActive(XmlNode node)
         {
             return !ParseBagBoolean(node["bag_LVC:aanduidingRecordInactief"]);
         }
 
-        private static int ParseCorrectionIndex(XmlNode node)
+        private int ParseCorrectionIndex(XmlNode node)
         {
             return ParseInt(node["bag_LVC:aanduidingRecordCorrectie"]);
         }
 
-        private static Interval ParseValidityInterval(XmlNode node)
+        private Interval ParseValidityInterval(XmlNode node)
         {
             var validityNode = node["bag_LVC:tijdvakgeldigheid"];
 
@@ -271,17 +271,17 @@ namespace Tiesmaster.ProjectZen.BagImporter
             return new Interval(start ?? Instant.MinValue, end ?? Instant.MaxValue);
         }
 
-        private static int ParseInt(XmlElement element)
+        private int ParseInt(XmlElement element)
         {
             return int.Parse(element.InnerText);
         }
 
-        private static bool ParseBagBoolean(XmlElement element)
+        private bool ParseBagBoolean(XmlElement element)
         {
             return element.InnerText == "Y";
         }
 
-        private static Instant? ParseBagInstant(XmlElement element)
+        private Instant? ParseBagInstant(XmlElement element)
         {
             if (element == null)
             {
@@ -291,7 +291,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
             return _bagInstantPattern.Parse(element.InnerText).Value;
         }
 
-        private static GeometryPolygon ParseGeometry(XmlNode node)
+        private GeometryPolygon ParseGeometry(XmlNode node)
         {
             var gmlFormatter = GmlFormatter.Create();
 

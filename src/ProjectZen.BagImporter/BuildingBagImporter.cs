@@ -16,13 +16,15 @@ namespace Tiesmaster.ProjectZen.BagImporter
 {
     public class BuildingBagImporter
     {
+        private readonly BagParser _bagParser;
         private readonly IClock _clock;
         private readonly string _bagXmlFilesPath;
         private readonly int _maxFilesToProcess;
         private readonly ILogger _logger;
 
-        public BuildingBagImporter(IClock clock, string bagXmlFilesPath, int maxFilesToProcess = int.MaxValue)
+        public BuildingBagImporter(BagParser bagParser, IClock clock, string bagXmlFilesPath, int maxFilesToProcess = int.MaxValue)
         {
+            _bagParser = bagParser;
             _clock = clock;
             _bagXmlFilesPath = bagXmlFilesPath;
             _maxFilesToProcess = maxFilesToProcess;
@@ -30,11 +32,11 @@ namespace Tiesmaster.ProjectZen.BagImporter
             _logger = Log.Logger;
         }
 
-        public IEnumerable<BagPand> ReadPanden() => ReadBagObjecten("PND", "Panden", BagParser.ParsePanden);
-        public IEnumerable<BagVerblijfsobject> ReadVerblijfsobjecten() => ReadBagObjecten("VBO", "Verblijfsobjecten", BagParser.ParseVerblijfsobjecten);
-        public IEnumerable<BagNummeraanduiding> ReadNummeraanduidingen() => ReadBagObjecten("NUM", "Nummeraanduidingen", BagParser.ParseNummeraanduidingen);
-        public IEnumerable<BagOpenbareRuimte> ReadOpenbareRuimten() => ReadBagObjecten("OPR", "OpenbareRuimten", BagParser.ParseOpenbareRuimten);
-        public IEnumerable<BagWoonplaats> ReadWoonplaatsen() => ReadBagObjecten("WPL", "Woonplaatsen", BagParser.ParseWoonplaatsen);
+        public IEnumerable<BagPand> ReadPanden() => ReadBagObjecten("PND", "Panden", _bagParser.ParsePanden);
+        public IEnumerable<BagVerblijfsobject> ReadVerblijfsobjecten() => ReadBagObjecten("VBO", "Verblijfsobjecten", _bagParser.ParseVerblijfsobjecten);
+        public IEnumerable<BagNummeraanduiding> ReadNummeraanduidingen() => ReadBagObjecten("NUM", "Nummeraanduidingen", _bagParser.ParseNummeraanduidingen);
+        public IEnumerable<BagOpenbareRuimte> ReadOpenbareRuimten() => ReadBagObjecten("OPR", "OpenbareRuimten", _bagParser.ParseOpenbareRuimten);
+        public IEnumerable<BagWoonplaats> ReadWoonplaatsen() => ReadBagObjecten("WPL", "Woonplaatsen", _bagParser.ParseWoonplaatsen);
 
         public IEnumerable<TBagObject> ReadBagObjecten<TBagObject>(
             string bagObjectCode,

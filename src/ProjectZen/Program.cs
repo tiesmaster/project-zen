@@ -30,6 +30,7 @@ namespace Tiesmaster.ProjectZen
 
             var maxFilesToProcess = 100;
             var buildingImporter = new BuildingBagImporter(
+                new BagParser(),
                 SystemClock.Instance,
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
