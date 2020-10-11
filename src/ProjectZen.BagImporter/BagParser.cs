@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Xml;
 
+using Microsoft.Spatial;
+
 using NodaTime;
 using NodaTime.Text;
 
@@ -290,9 +292,14 @@ namespace Tiesmaster.ProjectZen.BagImporter
             return _bagInstantPattern.Parse(element.InnerText).Value;
         }
 
-        private static string ParseGeometry(XmlNode node)
+        private static GeometryPolygon ParseGeometry(XmlNode node)
         {
-            return node["bag_LVC:pandGeometrie"].InnerText;
+            var gmlFormatter = GmlFormatter.Create();
+
+            var gmlNode = node["bag_LVC:pandGeometrie"].FirstChild;
+            var reader = new XmlNodeReader(gmlNode);
+
+            return gmlFormatter.Read<GeometryPolygon>(reader);
         }
     }
 }
