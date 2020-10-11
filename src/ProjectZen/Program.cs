@@ -56,7 +56,7 @@ namespace Tiesmaster.ProjectZen
                 .Enrich.WithProperty("ApplicationVersion", GetAssemblyVersion())
                 .Enrich.FromLogContext()
                 .WriteTo.ColoredConsole()
-                .WriteTo.Seq("http://localhost:5341")
+                .WriteTo.Seq("http://localhost:5342")
                 .CreateLogger();
         }
 

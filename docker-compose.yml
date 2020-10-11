@@ -10,8 +10,8 @@ services:
   seq:
     image: datalust/seq
     ports:
-      - "5341:5341"
-      - "15341:80"
+      - "5342:5341"
+      - "15342:80"
     environment:
       ACCEPT_EULA: "Y"
     volumes:
