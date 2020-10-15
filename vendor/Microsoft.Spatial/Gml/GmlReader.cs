@@ -627,14 +627,14 @@ namespace Microsoft.Spatial
                         double[] doubleList = this.ReadContentAsDoubleArray();
                         if (doubleList.Length != 0)
                         {
-                            if (doubleList.Length % 2 != 0)
+                            if (doubleList.Length % 3 != 0)
                             {
                                 // Odd number of doubles
                                 throw new FormatException(Strings.GmlReader_PosListNeedsEvenCount);
                             }
 
                             // posList supports only 2D points
-                            for (int i = 0; i < doubleList.Length; i += 2)
+                            for (int i = 0; i < doubleList.Length; i += 3)
                             {
                                 this.AddPoint(doubleList[i], doubleList[i + 1], null, null);
                             }
