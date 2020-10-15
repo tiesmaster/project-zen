@@ -10,9 +10,9 @@
     <IsPackable>true</IsPackable>
     <IsShipping>true</IsShipping>
   </PropertyGroup>
-   
+
   <!-- References -->
-   <Import Project="..\Build.props" />
+  <Import Project="Build-dotdot.props" />
   <!-- Generated files -->
 
   <ItemGroup>
@@ -60,7 +60,7 @@
       <LastGenOutput>Parameterized.Microsoft.Spatial.cs</LastGenOutput>
     </Resource>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="Microsoft.Spatial.cs">
       <DesignTime>True</DesignTime>
