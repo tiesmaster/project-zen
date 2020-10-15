@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo\AssemblyKeys.cs" Link="AssemblyKeys.cs" />
-    <Compile Include="..\PlatformHelper.cs" Link="PlatformHelper.cs" />
+    <!-- <Compile Include="..\PlatformHelper.cs" Link="PlatformHelper.cs" /> -->
   </ItemGroup>
 
   <ItemGroup>
