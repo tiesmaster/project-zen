@@ -9,6 +9,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <IsPackable>true</IsPackable>
     <IsShipping>true</IsShipping>
+    <NoWarn>1701;1702;CA1825;CA2225</NoWarn>
   </PropertyGroup>
 
   <!-- References -->
