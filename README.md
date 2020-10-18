@@ -43,3 +43,11 @@
 - https://benchmarkdotnet.org/articles/contributing/running-tests.html
 - https://github.com/dotnet/BenchmarkDotNet/issues/155
 - https://aakinshin.net/posts/jon-skeet-quiz/
+
+# BRAINDUMP 2020-10-18
+
+ - https://www.google.com/search?client=firefox-b-d&q=ravendb+IncludeDocuments
+ - https://ravendb.net/docs/article-page/4.2/csharp/client-api/session/loading-entities
+ - https://ravendb.net/docs/article-page/4.2/csharp/client-api/session/querying/how-to-get-query-statistics#session-querying-how-to-get-query-statistics
+ - https://www.google.com/search?client=firefox-b-d&q=ravendb+linq+contains
+ - https://ravendb.net/docs/article-page/5.0/csharp/indexes/querying/filtering
