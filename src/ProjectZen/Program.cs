@@ -9,12 +9,15 @@ using MoreLinq;
 using NodaTime;
 
 using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
 
 using Serilog;
 
 using Tiesmaster.ProjectZen.BagImporter;
+using Tiesmaster.ProjectZen.Domain;
+using Tiesmaster.ProjectZen.Domain.Bag;
 
 namespace Tiesmaster.ProjectZen
 {
@@ -28,24 +31,72 @@ namespace Tiesmaster.ProjectZen
             var totalSw = Stopwatch.StartNew();
             Log.Logger.StartImport();
 
-            var maxFilesToProcess = 10;
+            var maxFilesToProcess = 10_000;
             var buildingImporter = new BuildingBagImporter(
                 new BagParser(),
                 SystemClock.Instance,
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            //buildingImporter.ReadWoonplaatsen();
-            //buildingImporter.ReadOpenbareRuimten();
-            //buildingImporter.ReadNummeraanduidingen();
+            var wpls = buildingImporter.ReadWoonplaatsen();
+            PersistToRavenDB(wpls);
+
+            var oprs = buildingImporter.ReadOpenbareRuimten();
+            PersistToRavenDB(oprs);
+
+            var nums = buildingImporter.ReadNummeraanduidingen();
+            PersistToRavenDB(nums);
+
             var vbos = buildingImporter.ReadVerblijfsobjecten();
-            //buildingImporter.ReadPanden();
+            PersistToRavenDB(vbos);
+
+            var panden = buildingImporter.ReadPanden();
+
+            using var store = OpenDocumentStore();
+            using var session = store.OpenSession();
+
+            var bulkInsert = store.BulkInsert();
+
+            foreach (var pand in panden)
+            {
+                var building = ConstructBuilding(pand, session);
+                bulkInsert.Store(building);
+            }
 
             //var buildings = buildingImporter.ReadBuildings();
-            PersistToRavenDB(vbos);
+            //PersistToRavenDB(vbos);
 
             Log.Logger.FinishedImport(totalSw);
             Log.CloseAndFlush();
+        }
+
+        private static Building ConstructBuilding(BagPand pand, IDocumentSession session)
+        {
+            var relatedVbos = session.Query<BagVerblijfsobject>().Where(x => x.RelatedPanden.Contains(pand.Id));
+
+            var address = relatedVbos.Any()
+                ? GetAddress(relatedVbos.First(), session)
+                : null;
+
+            return new Building(
+                pand.Id,
+                pand.ConstructionYear,
+                address);
+        }
+
+        private static Address GetAddress(BagVerblijfsobject relatedVbo, IDocumentSession session)
+        {
+            var relatedNum = session.Load<BagNummeraanduiding>(relatedVbo.RelatedMainAddress);
+            var relatedOpr = session.Load<BagOpenbareRuimte>(relatedNum.RelatedOpenbareRuimte);
+            var relatedWpl = session.Load<BagWoonplaats>(relatedOpr.RelatedWoonplaats);
+
+            return new Address(
+                relatedOpr.Name,
+                relatedNum.HouseNumber,
+                relatedNum.HouseLetter,
+                relatedNum.HouseNumberAddition,
+                relatedNum.PostalCode,
+                relatedWpl.Name);
         }
 
         private static void ConfigureLogging()
