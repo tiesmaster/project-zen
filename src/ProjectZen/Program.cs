@@ -38,17 +38,17 @@ namespace Tiesmaster.ProjectZen
                 "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            var wpls = buildingImporter.ReadWoonplaatsen();
-            PersistToRavenDB(wpls);
+            //var wpls = buildingImporter.ReadWoonplaatsen();
+            //PersistToRavenDB(wpls);
 
-            var oprs = buildingImporter.ReadOpenbareRuimten();
-            PersistToRavenDB(oprs);
+            //var oprs = buildingImporter.ReadOpenbareRuimten();
+            //PersistToRavenDB(oprs);
 
-            var nums = buildingImporter.ReadNummeraanduidingen();
-            PersistToRavenDB(nums);
+            //var nums = buildingImporter.ReadNummeraanduidingen();
+            //PersistToRavenDB(nums);
 
-            var vbos = buildingImporter.ReadVerblijfsobjecten();
-            PersistToRavenDB(vbos);
+            //var vbos = buildingImporter.ReadVerblijfsobjecten();
+            //PersistToRavenDB(vbos);
 
             var panden = buildingImporter.ReadPanden();
 
