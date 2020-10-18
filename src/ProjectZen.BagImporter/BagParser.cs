@@ -133,7 +133,7 @@ namespace Tiesmaster.ProjectZen.BagImporter
                 id: ParseId(node),
                 version: ParseBagVersion(node),
                 constructionYear: ParseConstructionYear(node),
-                geometry: ParseGeometry(node));
+                geometry: default); // ParseGeometry(node));
         }
 
         private BagVerblijfsobject ParseVerblijfsobject(XmlNode node, XmlNamespaceManager namespaceManager)
