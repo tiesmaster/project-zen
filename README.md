@@ -51,3 +51,11 @@
  - https://ravendb.net/docs/article-page/4.2/csharp/client-api/session/querying/how-to-get-query-statistics#session-querying-how-to-get-query-statistics
  - https://www.google.com/search?client=firefox-b-d&q=ravendb+linq+contains
  - https://ravendb.net/docs/article-page/5.0/csharp/indexes/querying/filtering
+
+# BRAINDUMP 2020-11-11
+
+ - `$ docker volume ls`
+ - `$ docker volume inspect project-zen_seq-data-volume`
+ - `$ docker system df`
+ - `$ docker system df -v`
+ - `$ docker system df -v |grep project-zen_.*volume`
