@@ -7,6 +7,8 @@ services:
     environment:
       RAVEN_License_Eula_Accepted: "true"
       RAVEN_Setup_Mode: None
+    volumes:
+      - ravendb-data-volume:/opt/RavenDB/Server/RavenData
   seq:
     image: datalust/seq
     ports:
@@ -18,4 +20,5 @@ services:
       - seq-data-volume:/data
 
 volumes:
+  ravendb-data-volume:
   seq-data-volume:
