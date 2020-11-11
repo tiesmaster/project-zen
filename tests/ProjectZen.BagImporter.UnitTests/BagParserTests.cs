@@ -72,8 +72,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var expectedPand = new BagPand(
                 id: "0599100000661089",
                 version: new BagVersion(
-                    active: true,
-                    correctionIndex: 0,
+                    Active: true,
+                    CorrectionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 constructionYear: 1942,
                 geometry: FromWkt("SRID=28992;POLYGON ((91810.39 435310.8, 91811.73 435310.76, 91811.741 435311.15, 91811.75 435311.47, 91811.691 435312.149, 91811.522 435312.809, 91811.248 435313.433, 91810.876 435314.003, 91810.416 435314.506, 91809.88 435314.927, 91809.283 435315.256, 91808.641 435315.482, 91807.97 435315.602, 91807.61 435315.62, 91807.63 435314.27, 91798.96 435314.3, 91798.98 435314.97, 91798.794 435315.83, 91798.645 435316.101, 91798.457 435316.346, 91798.235 435316.56, 91797.983 435316.739, 91797.707 435316.878, 91797.414 435316.974, 91797.109 435317.026, 91796.801 435317.031, 91796.494 435316.99, 91796.198 435316.904, 91795.918 435316.774, 91795.66 435316.604, 91795.431 435316.398, 91795.235 435316.159, 91795.076 435315.894, 91794.96 435315.608, 91794.887 435315.308, 91794.86 435315, 91794.88 435311.78, 91794.57 435311.781, 91790.84 435311.79, 91790.61 435311.61, 91790.62 435311.17, 91787.789 435311.161, 91787.708 435311.155, 91787.629 435311.142, 91787.551 435311.121, 91787.475 435311.094, 91787.401 435311.061, 91787.331 435311.021, 91787.265 435310.975, 91787.203 435310.923, 91787.146 435310.866, 91787.095 435310.804, 91787.049 435310.738, 91787.009 435310.668, 91786.975 435310.595, 91786.948 435310.519, 91786.928 435310.441, 91786.915 435310.361, 91786.909 435310.281, 91786.91 435310.2, 91786.89 435302.91, 91787.122 435302.27, 91787.88 435301.96, 91790.6 435301.94, 91790.8 435301.32, 91792.29 435301.313, 91809.15 435301.23, 91809.301 435301.841, 91809.37 435302.12, 91810.38 435302.1, 91810.39 435310.8))"));
@@ -145,8 +145,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var expectedPand = new BagPand(
                 id: "0599100000661089",
                 version: new BagVersion(
-                    active: true,
-                    correctionIndex: 0,
+                    Active: true,
+                    CorrectionIndex: 0,
                     new Interval(startInstant, endInstant)),
                 constructionYear: 1942,
                 geometry: FromWkt("SRID=28992;POLYGON ((91810.39 435310.8, 91811.73 435310.76, 91811.741 435311.15, 91811.75 435311.47, 91811.691 435312.149, 91811.522 435312.809, 91811.248 435313.433, 91810.876 435314.003, 91810.416 435314.506, 91809.88 435314.927, 91809.283 435315.256, 91808.641 435315.482, 91807.97 435315.602, 91807.61 435315.62, 91807.63 435314.27, 91798.96 435314.3, 91798.98 435314.97, 91798.794 435315.83, 91798.645 435316.101, 91798.457 435316.346, 91798.235 435316.56, 91797.983 435316.739, 91797.707 435316.878, 91797.414 435316.974, 91797.109 435317.026, 91796.801 435317.031, 91796.494 435316.99, 91796.198 435316.904, 91795.918 435316.774, 91795.66 435316.604, 91795.431 435316.398, 91795.235 435316.159, 91795.076 435315.894, 91794.96 435315.608, 91794.887 435315.308, 91794.86 435315, 91794.88 435311.78, 91794.57 435311.781, 91790.84 435311.79, 91790.61 435311.61, 91790.62 435311.17, 91787.789 435311.161, 91787.708 435311.155, 91787.629 435311.142, 91787.551 435311.121, 91787.475 435311.094, 91787.401 435311.061, 91787.331 435311.021, 91787.265 435310.975, 91787.203 435310.923, 91787.146 435310.866, 91787.095 435310.804, 91787.049 435310.738, 91787.009 435310.668, 91786.975 435310.595, 91786.948 435310.519, 91786.928 435310.441, 91786.915 435310.361, 91786.909 435310.281, 91786.91 435310.2, 91786.89 435302.91, 91787.122 435302.27, 91787.88 435301.96, 91790.6 435301.94, 91790.8 435301.32, 91792.29 435301.313, 91809.15 435301.23, 91809.301 435301.841, 91809.37 435302.12, 91810.38 435302.1, 91810.39 435310.8))"));
@@ -227,8 +227,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var expectedVerblijfsobject = new BagVerblijfsobject(
                 id: "0599010000253867",
                 version: new BagVersion(
-                    active: true,
-                    correctionIndex: 0,
+                    Active: true,
+                    CorrectionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 relatedMainAddress: "0599200000300941",
                 relatedPanden: "0599100000634909");
@@ -312,8 +312,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var expectedVerblijfsobject = new BagVerblijfsobject(
                 id: "0599010000253867",
                 version: new BagVersion(
-                    active: true,
-                    correctionIndex: 0,
+                    Active: true,
+                    CorrectionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 relatedMainAddress: "0599200000300941",
                 relatedAdditionalAddresses: ImmutableList.Create(
@@ -383,8 +383,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var expectedNummeraanduiding = new BagNummeraanduiding(
                 id: "0000200000057534",
                 version: new BagVersion(
-                    active: true,
-                    correctionIndex: 0,
+                    Active: true,
+                    CorrectionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 houseNumber: 32,
                 houseLetter: null,
@@ -455,8 +455,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var expectedNummeraanduiding = new BagNummeraanduiding(
                 id: "0000200000057534",
                 version: new BagVersion(
-                    active: true,
-                    correctionIndex: 0,
+                    Active: true,
+                    CorrectionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 houseNumber: 32,
                 houseLetter: 'A',
@@ -524,8 +524,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var expectedOpenbareRuimte = new BagOpenbareRuimte(
                 id: "0003300000116985",
                 version: new BagVersion(
-                    active: true,
-                    correctionIndex: 0,
+                    Active: true,
+                    CorrectionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 name: "Abel Eppensstraat",
                 relatedWoonplaats: "3386");
@@ -595,8 +595,8 @@ namespace Tiesmaster.ProjectZen.BagImporter.UnitTests
             var expectedWoonplaats = new BagWoonplaats(
                 id: "3086",
                 version: new BagVersion(
-                    active: true,
-                    correctionIndex: 0,
+                    Active: true,
+                    CorrectionIndex: 0,
                     new Interval(startInstant, Instant.MaxValue)),
                 name: "Rotterdam");
 

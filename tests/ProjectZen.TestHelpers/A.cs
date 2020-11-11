@@ -11,9 +11,9 @@ namespace Tiesmaster.ProjectZen.TestHelpers
     {
         public static BagVersion BagVersion =
             new BagVersion(
-                active: true,
-                correctionIndex: 0,
-                validityInterval: new Interval(
+                Active: true,
+                CorrectionIndex: 0,
+                ValidityInterval: new Interval(
                     DateTime.UtcNow.ToInstant(),
                     DateTime.UtcNow.AddDays(1).ToInstant()));
     }

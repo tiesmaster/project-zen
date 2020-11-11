@@ -253,9 +253,9 @@ namespace Tiesmaster.ProjectZen.BagImporter
         private BagVersion ParseBagVersion(XmlNode node)
         {
             return new BagVersion(
-                active: ParseBagActive(node),
-                correctionIndex: ParseCorrectionIndex(node),
-                validityInterval: ParseValidityInterval(node));
+                Active: ParseBagActive(node),
+                CorrectionIndex: ParseCorrectionIndex(node),
+                ValidityInterval: ParseValidityInterval(node));
         }
 
         private bool ParseBagActive(XmlNode node)
