@@ -109,7 +109,7 @@ namespace Tiesmaster.ProjectZen
             const string databaseName = "ProjectZen";
             var store = new DocumentStore
             {
-                Urls = new[] { "http://localhost:8080" },
+                Urls = new[] { "http://localhost:8282" },
                 Database = databaseName
             };
 
