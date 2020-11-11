@@ -1,10 +1,7 @@
-﻿using System.Collections.Immutable;
-
 using NodaTime;
 
 namespace Tiesmaster.ProjectZen.Domain.Bag
 {
-
     public readonly struct BagVersion
     {
         public BagVersion(bool active, int correctionIndex, Interval validityInterval)

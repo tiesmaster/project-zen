@@ -1,4 +1,4 @@
-﻿namespace Tiesmaster.ProjectZen.Domain.Bag
+namespace Tiesmaster.ProjectZen.Domain.Bag
 {
     public class BagWoonplaats : BagBase
     {
