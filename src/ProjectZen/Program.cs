@@ -28,7 +28,7 @@ namespace Tiesmaster.ProjectZen
             var totalSw = Stopwatch.StartNew();
             Log.Logger.StartImport();
 
-            var maxFilesToProcess = 10;
+            var maxFilesToProcess = 10_000;
             var buildingImporter = new BuildingBagImporter(
                 new BagParser(),
                 SystemClock.Instance,
