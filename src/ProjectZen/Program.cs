@@ -32,7 +32,7 @@ namespace Tiesmaster.ProjectZen
             var buildingImporter = new BuildingBagImporter(
                 new BagParser(),
                 SystemClock.Instance,
-                "c:/src/projects/project-zen/tmp/small-zips-unpacked/",
+                "c:/bag/small-zips-unpacked/",
                 maxFilesToProcess);
 
             //buildingImporter.ReadWoonplaatsen();

@@ -47,8 +47,10 @@ namespace Tiesmaster.ProjectZen.BagImporter
 
             var referenceInstant = _clock.GetCurrentInstant();
 
+            var bagObjectPath = Path.Combine(_bagXmlFilesPath, bagObjectCode.ToLowerInvariant());
+
             var bagObjectFiles = Directory
-                .EnumerateFiles(_bagXmlFilesPath, $"9999{bagObjectCode}*.xml")
+                .EnumerateFiles(bagObjectPath, $"9999{bagObjectCode}*.xml")
                 .Take(_maxFilesToProcess)
                 .ToList();
 
