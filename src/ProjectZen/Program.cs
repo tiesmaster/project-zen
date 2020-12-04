@@ -35,14 +35,14 @@ namespace Tiesmaster.ProjectZen
                 "c:/bag/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            //buildingImporter.ReadWoonplaatsen();
-            //buildingImporter.ReadOpenbareRuimten();
-            //buildingImporter.ReadNummeraanduidingen();
-            var vbos = buildingImporter.ReadVerblijfsobjecten();
-            //buildingImporter.ReadPanden();
+            PersistToRavenDB(buildingImporter.ReadWoonplaatsen());
+            PersistToRavenDB(buildingImporter.ReadOpenbareRuimten());
+            PersistToRavenDB(buildingImporter.ReadNummeraanduidingen());
+            PersistToRavenDB(buildingImporter.ReadVerblijfsobjecten());
+            PersistToRavenDB(buildingImporter.ReadPanden());
 
             //var buildings = buildingImporter.ReadBuildings();
-            PersistToRavenDB(vbos);
+            //PersistToRavenDB(vbos);
 
             Log.Logger.FinishedImport(totalSw);
             Log.CloseAndFlush();
