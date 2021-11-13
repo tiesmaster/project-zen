@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -18,6 +19,12 @@ using Tiesmaster.ProjectZen.BagImporter;
 
 namespace Tiesmaster.ProjectZen
 {
+    public class StreetAndCity
+    {
+        public string Street { get; set; }
+        public string City { get; set; }
+    }
+
     public static class Program
     {
         public static void Main()
@@ -35,11 +42,28 @@ namespace Tiesmaster.ProjectZen
                 "c:/bag/small-zips-unpacked/",
                 maxFilesToProcess);
 
-            PersistToRavenDB(buildingImporter.ReadWoonplaatsen());
-            PersistToRavenDB(buildingImporter.ReadOpenbareRuimten());
-            PersistToRavenDB(buildingImporter.ReadNummeraanduidingen());
-            PersistToRavenDB(buildingImporter.ReadVerblijfsobjecten());
-            PersistToRavenDB(buildingImporter.ReadPanden());
+            var wpls = buildingImporter.ReadWoonplaatsen().ToDictionary(x => x.Id, x => x.Name);
+            var oprs = buildingImporter.ReadOpenbareRuimten().ToDictionary(x => x.Id, x => new StreetAndCity { Street = x.Name, City = wpls[x.RelatedWoonplaats] });
+
+            var postalCodeDict = new Dictionary<string, StreetAndCity>();
+            foreach (var num in buildingImporter.ReadNummeraanduidingen())
+            {
+                if (num.PostalCode != null && !postalCodeDict.ContainsKey(num.PostalCode))
+                {
+                    postalCodeDict.Add(num.PostalCode, oprs[num.RelatedOpenbareRuimte]);
+                }
+            }
+
+            using var f = File.OpenWrite(@"c:\bag\postalcodes.csv");
+            using var writer = new StreamWriter(f);
+
+            foreach (var kvp in postalCodeDict)
+            {
+                writer.WriteLine($"{kvp.Key},{kvp.Value.City},{kvp.Value.Street}");
+            }
+
+            //PersistToRavenDB(buildingImporter.ReadVerblijfsobjecten());
+            //PersistToRavenDB(buildingImporter.ReadPanden());
 
             //var buildings = buildingImporter.ReadBuildings();
             //PersistToRavenDB(vbos);
